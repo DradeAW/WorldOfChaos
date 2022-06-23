@@ -44,7 +44,7 @@ public class ChatBar extends GameObject {
 	/**
 	 * ChatBox parent.
 	 */
-	private @NotNull ChatBox parent;
+	final private @NotNull ChatBox parent;
 
 	/**
 	 * When player press enter, ChatBar gains focus.
@@ -54,7 +54,7 @@ public class ChatBar extends GameObject {
 	/**
 	 * ChatBar's background.
 	 */
-	private @NotNull RenderedComponent background;
+	final private @NotNull RenderedComponent background;
 
 	/**
 	 * Message being currently typed.

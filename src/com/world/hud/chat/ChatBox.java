@@ -62,12 +62,12 @@ public class ChatBox extends HUDCategory {
 	/**
 	 * ChatBox's bar.
 	 */
-	private @NotNull ChatBar chatbar;
+	final private @NotNull ChatBar chatbar;
 
 	/**
 	 * Contains all the previously types messages.
 	 */
-	private @NotNull ArrayList<Text> textMessages;
+	final private @NotNull ArrayList<Text> textMessages;
 
 	/**
 	 * Creates a new ChatBox instance.
