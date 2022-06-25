@@ -101,7 +101,7 @@ abstract public class GameComponent implements GameInterface {
 	 *
 	 * @param width Component's width to set
 	 */
-	final protected void setWidth(final float width) {
+	final public void setWidth(final float width) {
 		this.width = width;
 	}
 
@@ -110,7 +110,7 @@ abstract public class GameComponent implements GameInterface {
 	 *
 	 * @param height Component's height to set
 	 */
-	final protected void setHeight(final float height) {
+	final public void setHeight(final float height) {
 		this.height = height;
 	}
 

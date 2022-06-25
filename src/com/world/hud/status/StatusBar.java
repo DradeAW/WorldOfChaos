@@ -36,6 +36,11 @@ public abstract class StatusBar extends GameObject {
 	final private Hero hero;
 
 	/**
+	 * Bar's content.
+	 */
+	final private RenderedComponent barContent;
+
+	/**
 	 * Bar's border.
 	 */
 	final private RenderedComponent barBorder;
@@ -49,14 +54,18 @@ public abstract class StatusBar extends GameObject {
 	 * Creates a new StatusBar instance.
 	 *
 	 * @param name Bar's name
+	 * @param contentMaterial Bar's content material
 	 * @param hero Hero to keep track of
 	 */
-	protected StatusBar(final @NotNull String name, final @NotNull Hero hero) {
+	protected StatusBar(final @NotNull String name, final Material contentMaterial, final @NotNull Hero hero) {
 		super("HUD status bar [" + name + "]", StatusBar.WIDTH, StatusBar.HEIGHT);
 
 		this.hero = hero;
 
 		this.addComponent(new RenderedComponent(StatusBar.BAR_BACKGROUND, StatusBar.WIDTH, StatusBar.HEIGHT));
+
+		this.barContent = new RenderedComponent(contentMaterial, StatusBar.WIDTH, StatusBar.HEIGHT);
+		this.addComponent(this.barContent);
 
 		this.barBorder = new RenderedComponent(this.getNotFullBorderMaterial(), StatusBar.WIDTH, StatusBar.HEIGHT, true);
 		this.addComponent(this.barBorder);
@@ -94,8 +103,13 @@ public abstract class StatusBar extends GameObject {
 	public void update(final double delta) {
 		super.update(delta);
 
-		final boolean isFull = this.getStatus() >= this.getStatusMax();
+		float filled = this.getStatus() / this.getStatusMax();
+		if (filled > 1.0f) {
+			filled = 1.0f;
+		}
+		this.barContent.setHeight(StatusBar.HEIGHT * filled); // TODO: Don't set the GameComponent's height but the RenderedComponent's Mesh height. (GameComponent's height can be set to protected).
 
+		final boolean isFull = this.getStatus() >= this.getStatusMax();
 		if(this.isFull != isFull) {
 			this.isFull = isFull;
 			this.barBorder.setMaterial(isFull ? this.getFullBorderMaterial() : this.getNotFullBorderMaterial());

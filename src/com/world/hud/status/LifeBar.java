@@ -9,6 +9,11 @@ import org.jetbrains.annotations.NotNull;
 public class LifeBar extends StatusBar {
 
 	/**
+	 * Texture of life bar's content.
+	 */
+	final public static Material BAR_CONTENT = new Material(new Texture("blank1x1"));
+
+	/**
 	 * Texture of life bar's border when full life.
 	 */
 	final public static Material BAR_BORDER_FULL = new Material(new Texture("hud/status/bar_border_life_full"));
@@ -24,7 +29,7 @@ public class LifeBar extends StatusBar {
 	 * @param hero Hero to keep track of.
 	 */
 	protected LifeBar(final @NotNull Hero hero) {
-		super("life", hero);
+		super("life", LifeBar.BAR_CONTENT, hero);
 	}
 
 	@Override

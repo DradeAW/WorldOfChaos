@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public class ManaBar extends StatusBar {
 
 	/**
+	 * Texture of mana bar's content.
+	 */
+	final public static Material BAR_CONTENT = new Material(new Texture("blank1x1"));
+
+	/**
 	 * Texture of mana bar's border when full mana.
 	 */
 	final public static Material BAR_BORDER_FULL = new Material(new Texture("hud/status/bar_border_mana_full"));
@@ -27,7 +32,7 @@ public class ManaBar extends StatusBar {
 	 * @param hero Hero to keep track of.
 	 */
 	protected ManaBar(final @NotNull Hero hero) {
-		super("mana", hero);
+		super("mana", ManaBar.BAR_CONTENT, hero);
 
 		this.setPosition(new Vector2f(StatusBar.X_BETWEEN_BARS, 0));
 	}
