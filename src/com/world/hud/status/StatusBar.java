@@ -46,7 +46,7 @@ public abstract class StatusBar extends GameObject {
 	final private RenderedComponent barBorder;
 
 	/**
-	 * Is the status bar full at the moment (i.e. which border is currently begin used).
+	 * Is the status bar full at the moment (i.e. which border is currently being used).
 	 */
 	private boolean isFull = false;
 
