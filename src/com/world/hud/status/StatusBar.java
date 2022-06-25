@@ -36,6 +36,16 @@ public abstract class StatusBar extends GameObject {
 	final private Hero hero;
 
 	/**
+	 * Bar's border.
+	 */
+	final private RenderedComponent barBorder;
+
+	/**
+	 * Is the status bar full at the moment (i.e. which border is currently begin used).
+	 */
+	private boolean isFull = false;
+
+	/**
 	 * Creates a new StatusBar instance.
 	 *
 	 * @param name Bar's name
@@ -47,6 +57,49 @@ public abstract class StatusBar extends GameObject {
 		this.hero = hero;
 
 		this.addComponent(new RenderedComponent(StatusBar.BAR_BACKGROUND, StatusBar.WIDTH, StatusBar.HEIGHT));
+
+		this.barBorder = new RenderedComponent(this.getNotFullBorderMaterial(), StatusBar.WIDTH, StatusBar.HEIGHT, true);
+		this.addComponent(this.barBorder);
+	}
+
+	/**
+	 * Returns the current value for the status bar.
+	 *
+	 * @return status
+	 */
+	public abstract float getStatus();
+
+	/**
+	 * Returns the maximum value for the status bar.
+	 *
+	 * @return max_status
+	 */
+	public abstract float getStatusMax();
+
+	/**
+	 * Returns the Material for the StatusBar border when it's full.
+	 *
+	 * @return full_status_border
+	 */
+	protected abstract Material getFullBorderMaterial();
+
+	/**
+	 * Returns the Material for the StatusBar border when it's not full.
+	 *
+	 * @return notfull_status_border
+	 */
+	protected abstract Material getNotFullBorderMaterial();
+
+	@Override
+	public void update(final double delta) {
+		super.update(delta);
+
+		final boolean isFull = this.getStatus() >= this.getStatusMax();
+
+		if(this.isFull != isFull) {
+			this.isFull = isFull;
+			this.barBorder.setMaterial(isFull ? this.getFullBorderMaterial() : this.getNotFullBorderMaterial());
+		}
 	}
 
 	/**
@@ -57,6 +110,15 @@ public abstract class StatusBar extends GameObject {
 	@Contract(pure = true)
 	final protected Hero getHero() {
 		return this.hero;
+	}
+
+	/**
+	 * Returns whether the current border being used is for a full bar of not.
+	 *
+	 * @return StatusBar.isFull
+	 */
+	final protected boolean isFull() {
+		return this.isFull;
 	}
 
 }

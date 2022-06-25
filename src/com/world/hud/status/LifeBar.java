@@ -14,14 +14,9 @@ public class LifeBar extends StatusBar {
 	final public static Material BAR_BORDER_FULL = new Material(new Texture("hud/status/bar_border_life_full"));
 
 	/**
-	 * Texture of life bar's border when not at full life.
+	 * Texture of life bar's border when low life.
 	 */
 	final public static Material BAR_BORDER_NOTFULL = new Material(new Texture("hud/status/bar_border_life_notfull"));
-
-	/**
-	 * Bar's border.
-	 */
-	final private RenderedComponent barBorder;
 
 	/**
 	 * Creates a new LifeBar instance.
@@ -30,16 +25,26 @@ public class LifeBar extends StatusBar {
 	 */
 	protected LifeBar(final @NotNull Hero hero) {
 		super("life", hero);
-
-		this.barBorder = new RenderedComponent(LifeBar.BAR_BORDER_FULL, StatusBar.WIDTH, StatusBar.HEIGHT, true);
-		this.addComponent(this.barBorder);
 	}
 
 	@Override
-	public void update(final double delta) {
-		super.update(delta);
+	public float getStatus() {
+		return 150.0f;
+	}
 
-		// TODO: If full life, set a border, otherwise set the other one.
+	@Override
+	public float getStatusMax() {
+		return 200.0f;
+	}
+
+	@Override
+	protected Material getFullBorderMaterial() {
+		return LifeBar.BAR_BORDER_FULL;
+	}
+
+	@Override
+	protected Material getNotFullBorderMaterial() {
+		return LifeBar.BAR_BORDER_NOTFULL;
 	}
 
 }

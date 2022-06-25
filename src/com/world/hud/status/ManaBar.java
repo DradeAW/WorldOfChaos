@@ -1,10 +1,12 @@
 package com.world.hud.status;
 
+import com.MainComponent;
 import com.objects.characters.Hero;
 import engine.game.components.RenderedComponent;
 import engine.math.Vector2f;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
+import engine.util.Time;
 import org.jetbrains.annotations.NotNull;
 
 public class ManaBar extends StatusBar {
@@ -15,9 +17,9 @@ public class ManaBar extends StatusBar {
 	final public static Material BAR_BORDER_FULL = new Material(new Texture("hud/status/bar_border_mana_full"));
 
 	/**
-	 * Bar's border.
+	 * Texture of mana bar's border when low mana.
 	 */
-	final private RenderedComponent barBorder;
+	final public static Material BAR_BORDER_NOTFULL = new Material(new Texture("hud/status/bar_border_mana_notfull"));
 
 	/**
 	 * Creates a new ManaBar instance.
@@ -28,9 +30,29 @@ public class ManaBar extends StatusBar {
 		super("mana", hero);
 
 		this.setPosition(new Vector2f(StatusBar.X_BETWEEN_BARS, 0));
+	}
 
-		this.barBorder = new RenderedComponent(ManaBar.BAR_BORDER_FULL, StatusBar.WIDTH, StatusBar.HEIGHT, true);
-		this.addComponent(this.barBorder);
+	@Override
+	public float getStatus() {
+		final long elapsedTime = Time.getNanoTime() - MainComponent.APPLICATION_START;
+		final float mana = elapsedTime * this.getStatusMax() / 30e9f;
+
+		return mana > this.getStatusMax() ? this.getStatusMax() : mana;
+	}
+
+	@Override
+	public float getStatusMax() {
+		return 200.0f;
+	}
+
+	@Override
+	protected Material getFullBorderMaterial() {
+		return ManaBar.BAR_BORDER_FULL;
+	}
+
+	@Override
+	protected Material getNotFullBorderMaterial() {
+		return ManaBar.BAR_BORDER_NOTFULL;
 	}
 
 }
