@@ -15,4 +15,4 @@ Then, to link the dll:
 To configure the annotations:
 - Go to the Project Structure (Ctrl+Shift+Alt+S)
 - Under "Project Settings", select Libraries
-- Click add --> from Maven --> type in "org.jetbrains:annotations:16.0.2"
+- Click add --> from Maven --> type in "org.jetbrains:annotations:24.1.0"

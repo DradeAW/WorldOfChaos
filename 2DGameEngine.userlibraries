@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<eclipse-userlibraries>
-  <library name="lwjgl">
-    <archive path="E:/IdeaProjects/2DGameEngine/lib/lwjgl.jar" />
-  </library>
-</eclipse-userlibraries>
-
