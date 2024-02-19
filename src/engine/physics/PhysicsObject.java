@@ -1,13 +1,12 @@
-package engine.physic;
+package engine.physics;
 
 import com.Options;
 import engine.game.objects.GameObject;
 import engine.game.objects.map.Map;
 import engine.math.Vector2f;
-import engine.physic.colliders.AABBCollider;
-import engine.physic.colliders.Collider;
-import engine.physic.colliders.CollisionInfo;
-import engine.physic.colliders.SegmentCollider;
+import engine.physics.colliders.AABBCollider;
+import engine.physics.colliders.Collider;
+import engine.physics.colliders.SegmentCollider;
 import engine.util.Direction;
 import engine.util.Position;
 import org.jetbrains.annotations.Contract;
@@ -21,12 +20,18 @@ public abstract class PhysicsObject extends GameObject {
 	 * Object's velocity/speed (represented as a vector).
 	 * Unit is number of tiles/second.
 	 */
-	private @NotNull Vector2f velocity = new Vector2f(0, 0);
+	private @NotNull Vector2f linearVelocity = new Vector2f(0, 0);
 
 	/**
-	 * Object's behaviour on collision.
+	 * Object's mass.
+	 * Unit in kilograms.
 	 */
-	final private CollisionBehaviour collisionBehaviour;
+	private float mass = 1.0f;
+
+	/**
+	 * Object's collider representation.
+	 */
+	private @NotNull CollisionBehaviour collisionBehaviour;
 
 	/**
 	 * Object's movements that are allowed.
@@ -44,24 +49,34 @@ public abstract class PhysicsObject extends GameObject {
 	 * @param name Name to set
 	 * @param width Width to set
 	 * @param height Height to set
-	 * @param behaviour Object's behaviour on collision
+	 * @param collisionBehaviour Object's behaviour on collision
 	 * @param movements Object's movements that are allowed
 	 */
-	public PhysicsObject(final @NotNull String name, final float width, final float height, final CollisionBehaviour behaviour, final MovementsAllowed movements) {
+	public PhysicsObject(final @NotNull String name, final float width, final float height, final @NotNull CollisionBehaviour collisionBehaviour, final MovementsAllowed movements) {
 		super(name, width, height);
 
-		this.collisionBehaviour = behaviour;
+		this.collisionBehaviour = collisionBehaviour;
 		this.movementsAllowed = movements;
 	}
 
 	/**
-	 * Returns a copy of the PhysicsObject's velocity (not the pointer itself).
+	 * Returns a copy of the PhysicsObject's linear velocity (not the pointer itself).
 	 *
 	 * @return new Vector2f(PhysicsObject.velocity)
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getVelocity() {
-		return new Vector2f(this.velocity);
+	final public @NotNull Vector2f getLinearVelocity() {
+		return new Vector2f(this.linearVelocity);
+	}
+
+	/**
+	 * Returns the PhysicsObject's mass (in kg).
+	 *
+	 * @return PhysicsObject.mass
+	 */
+	@Contract(pure = true)
+	final protected float getMass() {
+		return this.mass;
 	}
 
 	/**
@@ -130,7 +145,7 @@ public abstract class PhysicsObject extends GameObject {
 	 * @return boolean
 	 */
 	final public boolean isMoving() {
-		return !(this.getMovementsAllowed().equals(MovementsAllowed.IMMOBILE) || this.getVelocity().equals(Vector2f.zero));
+		return !(this.getMovementsAllowed().equals(MovementsAllowed.IMMOBILE) || this.getLinearVelocity().equals(Vector2f.zero));
 	}
 
 	/**
@@ -184,13 +199,22 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
-	 * Sets the PhysicsObject's velocity.
+	 * Sets the PhysicsObject's velocity (in number of tiles / s).
 	 * This assigns the pointer, so be careful modifying the vector after.
 	 *
 	 * @param velocity Velocity to set
 	 */
-	final protected void setVelocity(final @NotNull Vector2f velocity) {
-		this.velocity = velocity;
+	final protected void setLinearVelocity(final @NotNull Vector2f velocity) {
+		this.linearVelocity = velocity;
+	}
+
+	/**
+	 * Sets the PhysicsObject's mass.
+	 *
+	 * @param mass Mass to set (in kg)
+	 */
+	final protected void setMass(final float mass) {
+		this.mass = mass;
 	}
 
 	/**
@@ -208,7 +232,7 @@ public abstract class PhysicsObject extends GameObject {
 	 *
 	 * @return new Collider
 	 */
-	public abstract Collider asCollider();
+	public abstract @NotNull Collider asCollider();
 
 	/**
 	 * Returns an AABBCollider depending on the Position, width ahd height of the Physics Object.
@@ -231,7 +255,7 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
-	 * Automatically called when object is changing direction.8
+	 * Automatically called when object is changing direction.
 	 * Does nothing on its own, needs to be overridden.
 	 */
 	protected void refreshTexture() {
@@ -244,18 +268,18 @@ public abstract class PhysicsObject extends GameObject {
 	 * @param setNone Set direction to none if nul velocity?
 	 */
 	protected void refreshDirection(final boolean setNone) {
-		if(this.getVelocity().equals(Vector2f.zero)) {
+		if(this.getLinearVelocity().equals(Vector2f.zero)) {
 			if(setNone) this.setDirection(Direction.NONE);
 			return;
 		}
 
 		float theta;
 
-		if(this.getVelocity().getX() == 0) {
-			theta = this.getVelocity().getY() > 0 ? (float) Math.PI/2 : (float) -Math.PI/2;
+		if(this.getLinearVelocity().getX() == 0) {
+			theta = this.getLinearVelocity().getY() > 0 ? (float) Math.PI/2 : (float) -Math.PI/2;
 		} else {
-			theta = (float) Math.atan(this.getVelocity().getY() / this.getVelocity().getX());
-			if(this.getVelocity().getX() < 0) theta += theta < 0 ? Math.PI : -Math.PI;
+			theta = (float) Math.atan(this.getLinearVelocity().getY() / this.getLinearVelocity().getX());
+			if(this.getLinearVelocity().getX() < 0) theta += theta < 0 ? Math.PI : -Math.PI;
 		}
 
 		final byte direction;
@@ -269,7 +293,7 @@ public abstract class PhysicsObject extends GameObject {
 		else if(theta < Math.PI+.00001f || theta > Math.PI-.00001f) direction = Direction.WEST;
 		else {
 			System.err.println("Error: Couldn't find direction from velocity.");
-			System.err.println("Velocity: " + this.getVelocity() + " ; theta=" + theta);
+			System.err.println("Velocity: " + this.getLinearVelocity() + " ; theta=" + theta);
 			new Exception().printStackTrace();
 			direction = 0;
 		}
@@ -281,19 +305,34 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
+	 * Moves the PhysicsObject by a certain amount.
+	 *
+	 * @param translation Translation to apply
+	 */
+	final void move(final @NotNull Vector2f translation) {
+		this.setPosition(this.getPosition().add(translation));
+	}
+
+	/**
 	 * Moves the PhysicsObject for a frame.
 	 * This checks for map's tiles but not yet for intersection/collisions.
 	 *
 	 * @param delta Time of a frame
 	 */
-	final void move(final double delta) {
-		if(this.getVelocity().equals(Vector2f.zero)) return; // No need to move if nul velocity.
+	final void updatePosition(final double delta) {
+		final float tileSpeed = Map.getInstance().getTileSpeedOn(this.getPosition(), this.getPhysicsWidth(), this.getPhysicsHeight());
+		final @NotNull Vector2f translation = this.getLinearVelocity().mul((float)(delta * Options.TILE_SIZE * (this.canFly() ? 1 : tileSpeed)));
+		this.move(translation);
+		this.refreshDirection(false);
+
+		/*
+		if(this.getLinearVelocity().equals(Vector2f.zero)) return; // No need to move if nul velocity.
 
 		this.refreshDirection(false);
 
 		// TODO: There might be a faster way to do this.
 		final float tileSpeed = Map.getInstance().getTileSpeedOn(this.getPosition(), this.getPhysicsWidth(), this.getPhysicsHeight());
-		final @NotNull Vector2f velocity = this.getVelocity().mul((float)(delta * Options.TILE_SIZE * (this.canFly() ? 1 : tileSpeed)));
+		final @NotNull Vector2f velocity = this.getLinearVelocity().mul((float)(delta * Options.TILE_SIZE * (this.canFly() ? 1 : tileSpeed)));
 		final @NotNull Position futurePos = this.getPositionReference().addXYAsFloat(velocity);
 
 		int length = this.getPositionReference().distanceToXY(futurePos);
@@ -329,7 +368,7 @@ public abstract class PhysicsObject extends GameObject {
 		futurePos.set(posToSet); // TODO: Is futurePos necessary?
 
 		// Checking collisions with tiles (new).
-		/*if(!this.canFly()) {
+		if(!this.canFly()) {
 			for(final AABBCollider tileCollider : Map.getInstance().getTilesOnAsColliders(futurePos, this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt(), this.canWalk(), this.canSwim())) {
 				final Position colPos = this.handleCollision(futurePos, tileCollider);
 
@@ -340,9 +379,9 @@ public abstract class PhysicsObject extends GameObject {
 			}
 
 			futurePos.set(posToSet);
-		}*/
+		}
 
-		this.setPosition(futurePos.asVector2f());
+		this.setPosition(futurePos.asVector2f());*/
 	}
 
 	/**
@@ -411,17 +450,8 @@ public abstract class PhysicsObject extends GameObject {
 			}
 		}
 
-		this.setVelocity(new Vector2f(Vector2f.zero)); // TODO: This doesn't always happen like that.
+		this.setLinearVelocity(new Vector2f(Vector2f.zero)); // TODO: This doesn't always happen like that.
 		return posToSet;
-	}
-
-	/**
-	 * Moves the object for a certain distance.
-	 *
-	 * @param distance Distance (and direction) to move
-	 */
-	private void move(final @NotNull Vector2f distance) {
-		this.setPosition(this.getPosition().add(distance));
 	}
 
 	/**

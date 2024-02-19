@@ -1,5 +1,15 @@
-package engine.physic;
+package engine.physics;
 
+/*
+  The PhysicsEngine class is responsible for handling all the physics objects.
+
+  The Physics are based on Chris Hecker's "Rigid Body Dynamics" series of articles
+  https://www.chrishecker.com/Rigid_Body_Dynamics
+ */
+
+import engine.game.objects.map.Map;
+import engine.math.Vector2f;
+import engine.physics.colliders.Collider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,10 +33,36 @@ final public class PhysicsEngine {
 	 * @param delta Time of a frame
 	 */
 	public static void update(final double delta) {
-		for(int i = 0; i < PhysicsEngine.ITERATIONS_PER_FRAME; i++) {
+		for(int it = 0; it < PhysicsEngine.ITERATIONS_PER_FRAME; it++) {
+			// First we move each object.
 			for(final PhysicsObject object : PhysicsEngine.objects) {
 				if(!object.isMoving()) continue;
-				object.move(delta / PhysicsEngine.ITERATIONS_PER_FRAME);
+				object.updatePosition(delta / PhysicsEngine.ITERATIONS_PER_FRAME);
+			}
+
+			// Then, we detect and resolve collisions.
+			// TODO: Here, asCollider() can be called multiple times for the same object.
+			for(int i = 0; i < PhysicsEngine.objects.size(); i++) {
+				final PhysicsObject object = PhysicsEngine.objects.get(i);
+				final Collider collider1 = object.asCollider();
+				final ArrayList<Collider> potentialColliders = new ArrayList<>();
+
+				for(int j = i + 1; j < PhysicsEngine.objects.size(); j++) {
+					// TODO: Check position before checking for collision.
+					potentialColliders.add(PhysicsEngine.objects.get(j).asCollider());
+				}
+
+				if(!object.canFly()) {
+					potentialColliders.addAll(Map.getInstance().getTilesOnAsColliders(object.getPosition(), object.getPhysicsWidthAsInt(), object.getPhysicsHeightAsInt(), object.canWalk(), object.canSwim()));
+				}
+
+				for(final Collider collider2 : potentialColliders) {
+					final Vector2f normal = collider1.intersect(collider2);
+					if(normal == null)
+						continue;
+
+					
+				}
 			}
 		}
 	}

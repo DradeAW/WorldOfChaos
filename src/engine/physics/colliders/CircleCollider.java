@@ -1,4 +1,4 @@
-package engine.physic.colliders;
+package engine.physics.colliders;
 
 import engine.util.Position;
 import org.jetbrains.annotations.Contract;

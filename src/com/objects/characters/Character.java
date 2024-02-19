@@ -1,8 +1,8 @@
 package com.objects.characters;
 
-import engine.physic.CollisionBehaviour;
-import engine.physic.MovementsAllowed;
-import engine.physic.PhysicsObject;
+import engine.physics.CollisionBehaviour;
+import engine.physics.MovementsAllowed;
+import engine.physics.PhysicsObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -5,8 +5,8 @@ import engine.audio.AudioObject;
 import engine.game.Transform;
 import engine.game.components.GameComponent;
 import engine.math.Vector2f;
-import engine.physic.PhysicsEngine;
-import engine.physic.PhysicsObject;
+import engine.physics.PhysicsEngine;
+import engine.physics.PhysicsObject;
 import engine.rendering.shader.Shader;
 import engine.util.GameInterface;
 import engine.util.Input;
@@ -133,7 +133,7 @@ public class GameObject implements GameInterface {
 			final Vector2f pos = this.getPosition().add(this.getWidth()/2, this.getHeight()/2);
 
 			if(this instanceof PhysicsObject) {
-				audio.update(pos, ((PhysicsObject) this).getVelocity());
+				audio.update(pos, ((PhysicsObject) this).getLinearVelocity());
 			} else {
 				audio.update(pos);
 			}

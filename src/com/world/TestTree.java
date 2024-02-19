@@ -3,10 +3,10 @@ package com.world;
 import com.Options;
 import engine.game.components.RenderedComponent;
 import engine.math.Vector2f;
-import engine.physic.CollisionBehaviour;
-import engine.physic.MovementsAllowed;
-import engine.physic.PhysicsObject;
-import engine.physic.colliders.AABBCollider;
+import engine.physics.CollisionBehaviour;
+import engine.physics.MovementsAllowed;
+import engine.physics.PhysicsObject;
+import engine.physics.colliders.AABBCollider;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
 

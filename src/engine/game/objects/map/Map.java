@@ -4,7 +4,7 @@ import com.Options;
 import engine.CoreEngine;
 import engine.game.objects.GameObject;
 import engine.math.Vector2f;
-import engine.physic.colliders.AABBCollider;
+import engine.physics.colliders.AABBCollider;
 import engine.util.Position;
 import engine.util.Time;
 import engine.util.Window;
@@ -465,8 +465,8 @@ public class Map extends GameObject {
 	 *
 	 * @param x X position (in number of tiles)
 	 * @param y Y position (in number of tiles)
-	 * @param width Number of tiles on the x axis to check
-	 * @param height Number of tiles on the y axis to check
+	 * @param width Number of tiles on the x-axis to check
+	 * @param height Number of tiles on the y-axis to check
 	 * @return new float
 	 */
 	final public float getTileSpeedOn(final int x, final int y, final int width, final int height) {

@@ -4,7 +4,7 @@ import com.MainComponent;
 import com.Options;
 import engine.audio.AudioEngine;
 import engine.game.CoreGame;
-import engine.physic.PhysicsEngine;
+import engine.physics.PhysicsEngine;
 import engine.rendering.RenderingEngine;
 import engine.rendering.texture.TextureResource;
 import engine.util.Input;

@@ -5,10 +5,10 @@ import com.objects.characters.Character;
 import engine.audio.AudioObject;
 import engine.game.components.RenderedComponent;
 import engine.math.Vector2f;
-import engine.physic.CollisionBehaviour;
-import engine.physic.MovementsAllowed;
-import engine.physic.PhysicsObject;
-import engine.physic.colliders.CircleCollider;
+import engine.physics.CollisionBehaviour;
+import engine.physics.MovementsAllowed;
+import engine.physics.PhysicsObject;
+import engine.physics.colliders.CircleCollider;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class TestFireBall extends PhysicsObject {
 
 		this.setPosition(new Vector2f(40 * Options.TILE_SIZE, 7.5f * Options.TILE_SIZE));
 		this.setDepth(-0.3f);
-		this.setVelocity(new Vector2f(-6, 6));
+		this.setLinearVelocity(new Vector2f(-6, 6));
 
 		final RenderedComponent renderedComponent = new RenderedComponent(TestFireBall.MATERIAL, Options.TILE_SIZE, Options.TILE_SIZE);
 		this.addComponent(renderedComponent);

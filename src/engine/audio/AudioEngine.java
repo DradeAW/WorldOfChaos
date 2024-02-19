@@ -39,7 +39,7 @@ final public class AudioEngine {
 		alListenerf(AL_GAIN, GameOptions.getSlide("generalVolume").getValue()*0.01f);
 		if(Hero.getInstance() != null) {
 			alListener3f(AL_POSITION, Hero.getInstance().getPosition().getX(), Hero.getInstance().getPosition().getY(), 0.0f);
-			alListener3f(AL_VELOCITY, Hero.getInstance().getVelocity().getX(), Hero.getInstance().getVelocity().getY(), 0.0f);
+			alListener3f(AL_VELOCITY, Hero.getInstance().getLinearVelocity().getX(), Hero.getInstance().getLinearVelocity().getY(), 0.0f);
 			//alListener3f(AL_ORIENTATION, 0.0f, 0.0f, 0.0f); // TODO (Warning: putting 0, 0, 0 generates alGetError)
 		} else {
 			alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
