@@ -30,6 +30,6 @@ public abstract class Collider {
 	 * @return new int
 	 */
 	@Contract(pure = true)
-	public abstract int area();
+	public abstract float area();
 
 }

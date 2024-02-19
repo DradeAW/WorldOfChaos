@@ -7,11 +7,11 @@ package engine.physics;
   https://www.chrishecker.com/Rigid_Body_Dynamics
  */
 
-import engine.game.objects.map.Map;
 import engine.math.Vector2f;
 import engine.physics.colliders.Collider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -44,27 +44,54 @@ final public class PhysicsEngine {
 			// TODO: Here, asCollider() can be called multiple times for the same object.
 			for(int i = 0; i < PhysicsEngine.objects.size(); i++) {
 				final PhysicsObject object = PhysicsEngine.objects.get(i);
-				final Collider collider1 = object.asCollider();
-				final ArrayList<Collider> potentialColliders = new ArrayList<>();
+				final ArrayList<PhysicsObject> potentialColliders = new ArrayList<>();
 
 				for(int j = i + 1; j < PhysicsEngine.objects.size(); j++) {
-					// TODO: Check position before checking for collision.
-					potentialColliders.add(PhysicsEngine.objects.get(j).asCollider());
+					// TODO: Check position before adding.
+					potentialColliders.add(PhysicsEngine.objects.get(j));
 				}
 
-				if(!object.canFly()) {
+				// TODO: Add collision with map tiles.
+				/*if(!object.canFly()) {
 					potentialColliders.addAll(Map.getInstance().getTilesOnAsColliders(object.getPosition(), object.getPhysicsWidthAsInt(), object.getPhysicsHeightAsInt(), object.canWalk(), object.canSwim()));
-				}
+				}*/
 
-				for(final Collider collider2 : potentialColliders) {
-					final Vector2f normal = collider1.intersect(collider2);
-					if(normal == null)
-						continue;
+				for(final PhysicsObject object2 : potentialColliders) {
+					final Collider collider1 = object.asCollider();
+					final Collider collider2 = object2.asCollider();
 
-					
+					final @Nullable Vector2f normal = collider1.intersect(collider2);
+					if(normal == null) continue;
+
+					object.move(normal.mul(-0.5f));
+					object2.move(normal.mul(0.5f));
+
+					PhysicsEngine.resolveCollision(object, object2, normal);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Resolves a collision between two objects.
+	 *
+	 * @param object1 First PhysicsObject
+	 * @param object2 Second PhysicsObject
+	 * @param normal Collision's normal vector.
+	 */
+	private static void resolveCollision(final @NotNull PhysicsObject object1, final @NotNull PhysicsObject object2, final @NotNull Vector2f normal) {
+		final Vector2f relativeVelocity = object2.getLinearVelocity().sub(object1.getLinearVelocity());
+		if(relativeVelocity.dot(normal) > 0) return;
+
+		final float invMass1 = 1 / object1.getMass();
+		final float invMass2 = 1 / object2.getMass();
+
+		final float e = Math.min(object1.getRestitution(), object2.getRestitution());
+		final float j = -(1 + e) * relativeVelocity.dot(normal) / (invMass1 + invMass2);
+
+		final Vector2f impulse = normal.mul(j);
+		object1.addLinearVelocity(impulse.mul(-invMass1));
+		object2.addLinearVelocity(impulse.mul(invMass2));
 	}
 
 	/**

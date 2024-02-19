@@ -4,7 +4,6 @@ import com.Options;
 import engine.CoreEngine;
 import engine.game.objects.GameObject;
 import engine.math.Vector2f;
-import engine.physics.colliders.AABBCollider;
 import engine.util.Position;
 import engine.util.Time;
 import engine.util.Window;

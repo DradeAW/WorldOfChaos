@@ -1,5 +1,6 @@
 package engine.physics.colliders;
 
+import engine.math.Vector2f;
 import engine.util.Position;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ public class CircleCollider extends Collider {
 	/**
 	 * Circle's center.
 	 */
-	private @NotNull Position center;
+	private @NotNull Vector2f center;
 
 	/**
 	 * Circle's radius.
@@ -23,8 +24,8 @@ public class CircleCollider extends Collider {
 	 * @param center Circle's center to set (sends a copy and not the pointer)
 	 * @param radius Circle's radius to set
 	 */
-	public CircleCollider(final @NotNull Position center, final int radius) {
-		this.center = new Position(center);
+	public CircleCollider(final @NotNull Vector2f center, final int radius) {
+		this.center = new Vector2f(center);
 		this.radius = radius;
 	}
 
@@ -35,38 +36,15 @@ public class CircleCollider extends Collider {
 	 * @param y Circle's center y position
 	 * @param radius Radius to set
 	 */
-	public CircleCollider(final long x, final long y, final int radius) {
-		this.center = new Position(x, y);
+	public CircleCollider(final float x, final float y, final int radius) {
+		this.center = new Vector2f(x, y);
 		this.radius = radius;
 	}
 
 	@Contract(pure = true)
 	@Override
-	public @Nullable CollisionInfo intersect(final @NotNull Collider collider) {
-		if(collider instanceof PointCollider || collider instanceof SegmentCollider || collider instanceof AABBCollider) {
-			return collider.intersect(this);
-		} else {
-			System.err.println("Error: Collision between CircleCollider and " + collider + " isn't implemented yet.");
-			return null;
-		}
-	}
-
-	@Contract(pure = true)
-	@Override
-	public boolean contains(final @NotNull Position point) {
-		return this.center.distanceToXY(point) < this.getRadius();
-	}
-
-	@Contract(pure = true)
-	@Override
-	public boolean on(final @NotNull Position point) {
-		return Math.abs(this.center.distanceToXY(point) - this.getRadius()) < 1;
-	}
-
-	@Contract(pure = true)
-	@Override
-	public boolean containsOrOn(final @NotNull Position point) {
-		return this.center.distanceToXY(point) < this.getRadius() + 1;
+	public @Nullable Vector2f intersect(final @NotNull Collider collider){
+		return null;
 	}
 
 	/**
@@ -91,8 +69,8 @@ public class CircleCollider extends Collider {
 
 	@Contract(pure = true)
 	@Override
-	public int area() {
-		return (int) Math.round(Math.PI * this.getRadius() * this.getRadius());
+	public float area() {
+		return Math.round(Math.PI * this.getRadius() * this.getRadius());
 	}
 
 }

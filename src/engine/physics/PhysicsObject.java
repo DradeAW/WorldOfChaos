@@ -4,15 +4,10 @@ import com.Options;
 import engine.game.objects.GameObject;
 import engine.game.objects.map.Map;
 import engine.math.Vector2f;
-import engine.physics.colliders.AABBCollider;
 import engine.physics.colliders.Collider;
-import engine.physics.colliders.SegmentCollider;
 import engine.util.Direction;
-import engine.util.Position;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import support.ArrayList;
 
 public abstract class PhysicsObject extends GameObject {
 
@@ -29,9 +24,11 @@ public abstract class PhysicsObject extends GameObject {
 	private float mass = 1.0f;
 
 	/**
-	 * Object's collider representation.
+	 * Object's restitution coefficient (bounciness).
+	 * 1.0 is a perfect elastic collision (i.e. no energy loss).
+	 * 0.0 is a perfectly inelastic collision (i.e. no bouncing).
 	 */
-	private @NotNull CollisionBehaviour collisionBehaviour;
+	private float restitution = 1.0f;
 
 	/**
 	 * Object's movements that are allowed.
@@ -49,13 +46,11 @@ public abstract class PhysicsObject extends GameObject {
 	 * @param name Name to set
 	 * @param width Width to set
 	 * @param height Height to set
-	 * @param collisionBehaviour Object's behaviour on collision
 	 * @param movements Object's movements that are allowed
 	 */
-	public PhysicsObject(final @NotNull String name, final float width, final float height, final @NotNull CollisionBehaviour collisionBehaviour, final MovementsAllowed movements) {
+	public PhysicsObject(final @NotNull String name, final float width, final float height, final MovementsAllowed movements) {
 		super(name, width, height);
 
-		this.collisionBehaviour = collisionBehaviour;
 		this.movementsAllowed = movements;
 	}
 
@@ -70,23 +65,32 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
+	 * Adds velocity to the PhysicsObject's linear velocity.
+	 *
+	 * @param velocity Velocity to add
+	 */
+	final public void addLinearVelocity(final @NotNull Vector2f velocity) {
+		this.linearVelocity.addition(velocity);
+	}
+
+	/**
 	 * Returns the PhysicsObject's mass (in kg).
 	 *
 	 * @return PhysicsObject.mass
 	 */
 	@Contract(pure = true)
-	final protected float getMass() {
+	final public float getMass() {
 		return this.mass;
 	}
 
 	/**
-	 * Returns how the Physics Object behaves when it collides.
+	 * Returns the PhysicsObject's restitution coefficient.
 	 *
-	 * @return PhysicsObject.collisionBehaviour
+	 * @return PhysicsObject.restitution
 	 */
 	@Contract(pure = true)
-	final protected CollisionBehaviour getCollisionBehaviour() {
-		return this.collisionBehaviour;
+	final public float getRestitution() {
+		return this.restitution;
 	}
 
 	/**
@@ -240,9 +244,9 @@ public abstract class PhysicsObject extends GameObject {
 	 *
 	 * @return new AABBCollider
 	 */
-	protected AABBCollider asAABBCollider() {
+	/*protected AABBCollider asAABBCollider() {
 		return new AABBCollider(this.getPositionReference(), this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt());
-	}
+	}*/
 
 	/**
 	 * Called when (this) collides with another object.
@@ -324,200 +328,6 @@ public abstract class PhysicsObject extends GameObject {
 		final @NotNull Vector2f translation = this.getLinearVelocity().mul((float)(delta * Options.TILE_SIZE * (this.canFly() ? 1 : tileSpeed)));
 		this.move(translation);
 		this.refreshDirection(false);
-
-		/*
-		if(this.getLinearVelocity().equals(Vector2f.zero)) return; // No need to move if nul velocity.
-
-		this.refreshDirection(false);
-
-		// TODO: There might be a faster way to do this.
-		final float tileSpeed = Map.getInstance().getTileSpeedOn(this.getPosition(), this.getPhysicsWidth(), this.getPhysicsHeight());
-		final @NotNull Vector2f velocity = this.getLinearVelocity().mul((float)(delta * Options.TILE_SIZE * (this.canFly() ? 1 : tileSpeed)));
-		final @NotNull Position futurePos = this.getPositionReference().addXYAsFloat(velocity);
-
-		int length = this.getPositionReference().distanceToXY(futurePos);
-		final @NotNull Position posToSet = new Position(futurePos);
-
-		final @NotNull ArrayList<Collider> potentialColliders = new ArrayList<>();
-
-		// Adding all neighbours tiles as potential colliders
-		if(!this.canFly()) {
-			potentialColliders.addAll(Map.getInstance().getTilesOnAsColliders(futurePos, this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt(), this.canWalk(), this.canSwim()));
-		}
-
-		// Check with all other Physics Object
-		for(final @NotNull PhysicsObject object : PhysicsEngine.getObjects()) {
-			if(object == this) {
-				continue;
-			}
-
-			if(this.willCollideWith(futurePos, object)) {
-				potentialColliders.add(object.asCollider());
-			}
-		}
-
-		for(final Collider potentialCollider : potentialColliders) {
-			final Position colPos = this.handleCollision(futurePos, potentialCollider);
-
-			if(this.getPositionReference().distanceToXY(colPos) <= length) {
-				length = this.getPositionReference().distanceToXY(colPos);
-				posToSet.set(colPos);
-			}
-		}
-
-		futurePos.set(posToSet); // TODO: Is futurePos necessary?
-
-		// Checking collisions with tiles (new).
-		if(!this.canFly()) {
-			for(final AABBCollider tileCollider : Map.getInstance().getTilesOnAsColliders(futurePos, this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt(), this.canWalk(), this.canSwim())) {
-				final Position colPos = this.handleCollision(futurePos, tileCollider);
-
-				if(this.getPositionReference().distanceToXY(colPos) <= length) {
-					length = this.getPositionReference().distanceToXY(colPos);
-					posToSet.set(colPos);
-				}
-			}
-
-			futurePos.set(posToSet);
-		}
-
-		this.setPosition(futurePos.asVector2f());*/
-	}
-
-	/**
-	 * Handles the physics of the collision.
-	 *
-	 * @param futurePos Future pos of this
-	 * @param collider Object this is colliding with
-	 * @return new Position (position to set to avoid collision)
-	 */
-	private @NotNull Position handleCollision(final @NotNull Position futurePos, final @NotNull Collider collider) { // TODO: Also take in rotation and scale ...
-		// First we need to know which corner(s) of (this) is the problem.
-		// TODO: Does this corner system work with all colliders?
-		final Position[] previousCorners = {this.getPositionReference(), this.getPositionReference().addX(this.getPhysicsWidthAsInt()), this.getPositionReference().addXY(this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt()), this.getPositionReference().addY(this.getPhysicsHeightAsInt())};
-		final Position[] corners = {futurePos, futurePos.addX(this.getPhysicsWidthAsInt()), futurePos.addXY(this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt()), futurePos.addY(this.getPhysicsHeightAsInt())};
-		final ArrayList<Integer> cornersColl = new ArrayList<>();
-		for(int i = 0; i < 4; i++) {
-			if(collider.containsOrOn(corners[i])) {
-				cornersColl.add(i);
-			}
-		}
-
-		Position posToSet = new Position(futurePos);
-		if(cornersColl.size() == 0) {
-			System.err.println("Error: handleCollision() called but no collision has been found.");
-			System.err.println("Corners:");
-			for(final Position corner : corners) {
-				System.err.println("  - " + corner);
-			}
-			System.err.println("collider: " + collider);
-			new Exception().printStackTrace();
-			return posToSet;
-		}
-
-		double length = previousCorners[0].distanceToXY(corners[0]);
-		for(final int cornerID : cornersColl) {
-			final SegmentCollider trajectory = new SegmentCollider(previousCorners[cornerID], corners[cornerID]);
-
-			if(collider instanceof AABBCollider) {
-				final CollisionInfo collisionInfo = trajectory.intersect(collider);
-
-				if(collisionInfo == null) {
-					System.err.println("Error: collisionInfo is null and shouldn't be.");
-					System.err.println(this);
-					System.err.println(collider);
-					new Exception().printStackTrace();
-					return posToSet;
-				}
-
-				final Position pointOfCollision = collisionInfo.getCollisionPoint();
-				if(pointOfCollision == null) {
-					System.err.println("Error: collisionPoint is null (the object probably started inside the AABBCollider).");
-					System.err.println(this);
-					System.err.println(collider);
-					return posToSet;
-				}
-
-				final double distanceToCollision = previousCorners[cornerID].distanceToXY(pointOfCollision);
-				if(distanceToCollision < length) {
-					length = distanceToCollision;
-					posToSet = new Position(futurePos).subtract(corners[cornerID].sub(pointOfCollision));
-				}
-			} else {
-				System.err.println("Error: Collision not implemented with this type of collider: " + collider);
-				new Exception().printStackTrace();
-				return posToSet;
-			}
-		}
-
-		this.setLinearVelocity(new Vector2f(Vector2f.zero)); // TODO: This doesn't always happen like that.
-		return posToSet;
-	}
-
-	/**
-	 * Returns a Vector2f containing how deep the 2 objects collide (with new position for (this)).
-	 * Returns null if it doesn't collide.
-	 * If (this) is on the bottom/left, values are negative.
-	 *
-	 * @param pos (this) new position
-	 * @param object Object to check with
-	 * @return new Vector2f
-	 */
-	final public @Nullable Vector2f getCollisionWith(final @NotNull Vector2f pos, final @NotNull PhysicsObject object) {
-		final Position thisPos = new Position(pos);
-		final Position objPos = object.getPositionReference();
-		long xCheck = Math.min(thisPos.getX() + Math.round(this.getPhysicsWidth()*Position.RATIO) - objPos.getX(), objPos.getX() + Math.round(object.getPhysicsWidth()*Position.RATIO) - thisPos.getX());
-		long yCheck = Math.min(thisPos.getY() + Math.round(this.getPhysicsHeight()*Position.RATIO) - objPos.getY(), objPos.getY() + Math.round(object.getPhysicsHeight()*Position.RATIO) - thisPos.getY());
-		if(xCheck <= 0 || yCheck <= 0) return null;
-		if(pos.getX() < object.getPosition().getX()) xCheck *= -1;
-		if(pos.getY() < object.getPosition().getY()) yCheck *= -1;
-
-		return new Vector2f((float)((double)xCheck/Position.RATIO), (float)((double)yCheck/Position.RATIO));
-	}
-
-	/**
-	 * Returns a Vector2f containing how deep the 2 objects collide.
-	 * Returns null if it doesn't collide.
-	 * If (this) is on the bottom/left, values are negative.
-	 *
-	 * @param object Object to check with
-	 * @return new Vector2f
-	 */
-	final public @Nullable Vector2f getCollisionWith(final @NotNull PhysicsObject object) {
-		return this.getCollisionWith(this.getPosition(), object);
-	}
-
-	/**
-	 * Returns whether this PhysicsObject collides with the object passed in parameter.
-	 *
-	 * @param object Object to check with
-	 * @return new boolean
-	 */
-	final public boolean collidesWith(final @NotNull PhysicsObject object) {
-		/*if(this.getPosition().getX() > object.getPosition().getX() + object.getPhysicsWidth()) return false;
-		if(object.getPosition().getX() > this.getPosition().getX() + this.getPhysicsWidth()) return false;
-		if(this.getPosition().getY() > object.getPosition().getY() + object.getPhysicsHeight()) return false;
-		if(object.getPosition().getY() > this.getPosition().getY() + this.getPhysicsHeight()) return false;
-
-		return true;*/
-		return this.getCollisionWith(object) != null;
-	}
-
-	/**
-	 * Returns whether this PhysicsObjects will collide with another after movement.
-	 *
-	 * @param futurePos Future pos of this
-	 * @param object PhysicsObject to check against
-	 * @return new boolean
-	 */
-	final protected boolean willCollideWith(final @NotNull Position futurePos, final @NotNull PhysicsObject object) {
-		// TODO: Use the collider of the Physics Object instead of just its position.
-		if(futurePos.getX() > object.getPositionReference().getX() + object.getPhysicsWidthAsInt()) return false;
-		if(object.getPositionReference().getX() > futurePos.getX() + this.getPhysicsWidthAsInt()) return false;
-		if(futurePos.getY() > object.getPositionReference().getY() + object.getPhysicsHeightAsInt()) return false;
-		if(object.getPositionReference().getY() > futurePos.getY() + this.getPhysicsHeightAsInt()) return false;
-
-		return true;
 	}
 
 }

@@ -5,7 +5,6 @@ import com.Options;
 import engine.game.components.Camera;
 import engine.game.components.RenderedComponent;
 import engine.math.Vector2f;
-import engine.physics.colliders.AABBCollider;
 import engine.rendering.texture.Animation;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
