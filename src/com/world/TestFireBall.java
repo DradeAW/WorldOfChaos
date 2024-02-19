@@ -41,7 +41,7 @@ public class TestFireBall extends PhysicsObject {
 
 	@Override
 	public CircleCollider asCollider() {
-		return new CircleCollider(this.getPositionReference().addXY(Options.TILE_SIZE_POS/2, Options.TILE_SIZE_POS/2), (int)(Options.TILE_SIZE_POS/2));
+		return new CircleCollider(this.getPositionReference().addXY(Options.TILE_SIZE/2, Options.TILE_SIZE/2), Options.TILE_SIZE / 2);
 	}
 
 	@Override

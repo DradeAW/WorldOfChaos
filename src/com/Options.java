@@ -1,6 +1,5 @@
 package com;
 
-import engine.util.Position;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,11 +39,6 @@ public interface Options {
 	 * Size of a tile in openGL units (2 is the height of the window).
 	 */
 	final public static float TILE_SIZE = 0.1f;
-
-	/**
-	 * Size of a tile in Position units.
-	 */
-	final public static long TILE_SIZE_POS = Position.convert(Options.TILE_SIZE);
 
 	/**
 	 * Defines the application's language.

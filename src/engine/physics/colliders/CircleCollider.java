@@ -1,7 +1,6 @@
 package engine.physics.colliders;
 
 import engine.math.Vector2f;
-import engine.util.Position;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,7 @@ public class CircleCollider extends Collider {
 	/**
 	 * Circle's radius.
 	 */
-	private int radius;
+	private float radius;
 
 	/**
 	 * Creates a new CircleCollider instance.
@@ -24,7 +23,7 @@ public class CircleCollider extends Collider {
 	 * @param center Circle's center to set (sends a copy and not the pointer)
 	 * @param radius Circle's radius to set
 	 */
-	public CircleCollider(final @NotNull Vector2f center, final int radius) {
+	public CircleCollider(final @NotNull Vector2f center, final float radius) {
 		this.center = new Vector2f(center);
 		this.radius = radius;
 	}
@@ -36,7 +35,7 @@ public class CircleCollider extends Collider {
 	 * @param y Circle's center y position
 	 * @param radius Radius to set
 	 */
-	public CircleCollider(final float x, final float y, final int radius) {
+	public CircleCollider(final float x, final float y, final float radius) {
 		this.center = new Vector2f(x, y);
 		this.radius = radius;
 	}
@@ -44,7 +43,23 @@ public class CircleCollider extends Collider {
 	@Contract(pure = true)
 	@Override
 	public @Nullable Vector2f intersect(final @NotNull Collider collider){
-		return null;
+		if(collider instanceof CircleCollider) {
+			final CircleCollider circleCollider = (CircleCollider) collider;
+
+			final float distance = this.getCenter().distanceTo(circleCollider.getCenter());
+			final float radii = this.getRadius() + circleCollider.getRadius();
+
+			if(distance >= radii) {
+				return null;
+			}
+
+			final Vector2f normal = circleCollider.getCenter().sub(this.getCenter()).normalized();
+			return normal.mul(radii - distance);
+		} else {
+			System.err.print("Error: Collision between CircleCollider and " + collider + " is not implemented yet.");
+			new Exception().printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -53,8 +68,8 @@ public class CircleCollider extends Collider {
 	 * @return new Position(CircleCollider.center).
 	 */
 	@Contract(pure = true)
-	final public @NotNull Position getCenter() {
-		return new Position(this.center);
+	final public @NotNull Vector2f getCenter() {
+		return new Vector2f(this.center);
 	}
 
 	/**
@@ -63,14 +78,14 @@ public class CircleCollider extends Collider {
 	 * @return CircleCollider.radius
 	 */
 	@Contract(pure = true)
-	final public int getRadius() {
+	final public float getRadius() {
 		return this.radius;
 	}
 
 	@Contract(pure = true)
 	@Override
 	public float area() {
-		return Math.round(Math.PI * this.getRadius() * this.getRadius());
+		return Math.round(Math.PI * this.radius * this.radius);
 	}
 
 }

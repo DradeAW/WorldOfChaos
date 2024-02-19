@@ -3,7 +3,6 @@ package engine.game;
 import engine.math.Matrix4f;
 import engine.math.Vector2f;
 import engine.math.Vector3f;
-import engine.util.Position;
 import engine.util.profiling.Profiler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,7 @@ final public class Transform {
 	/**
 	 * Transform's position.
 	 */
-	private @NotNull Position position;
+	final private @NotNull Vector3f position;
 
 	/**
 	 * Transform's rotation.
@@ -45,7 +44,7 @@ final public class Transform {
 	 * Creates a new Transform instance.
 	 */
 	public Transform() {
-		this.position = new Position();
+		this.position = new Vector3f();
 		this.setRotation(0.0);
 		this.scale = new Vector2f(1, 1);
 		this.setDepth(0.0f);
@@ -108,7 +107,7 @@ final public class Transform {
 	 * @return Transform.position
 	 */
 	@Contract(pure = true)
-	final public @NotNull Position getPositionReference() {
+	public @NotNull Vector3f getPositionReference() {
 		return this.position;
 	}
 
@@ -118,7 +117,7 @@ final public class Transform {
 	 * @return Transform.position.getXY()
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getPosition() {
+	public @NotNull Vector2f getPosition() {
 		return this.position.asVector2f();
 	}
 
@@ -128,7 +127,7 @@ final public class Transform {
 	 * @return new Vector2f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getTransformedPosition() {
+	public @NotNull Vector2f getTransformedPosition() {
 		final Vector2f r = new Vector2f(this.getPosition());
 
 		if(this.getParent() != null) {
@@ -144,7 +143,7 @@ final public class Transform {
 	 * @return Transform.rotation
 	 */
 	@Contract(pure = true)
-	final public double getRotation() {
+	public double getRotation() {
 		return this.rotation;
 	}
 
@@ -153,7 +152,7 @@ final public class Transform {
 	 *
 	 * @return new double
 	 */
-	final public double getTransformedRotation() {
+	public double getTransformedRotation() {
 		double r = this.getRotation();
 
 		if(this.getParent() != null) {
@@ -169,7 +168,7 @@ final public class Transform {
 	 * @return Transform.scale
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getScale() {
+	public @NotNull Vector2f getScale() {
 		return new Vector2f(this.scale);
 	}
 
@@ -179,7 +178,7 @@ final public class Transform {
 	 * @return new Vector2f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getTransformScale() {
+	public @NotNull Vector2f getTransformScale() {
 		final Vector2f r = new Vector2f(this.getScale());
 
 		if(this.getParent() != null) {
@@ -195,8 +194,8 @@ final public class Transform {
 	 * @return Transform.position.z
 	 */
 	@Contract(pure = true)
-	final public float getDepth() {
-		return this.position.getZAsFloat();
+	public float getDepth() {
+		return this.position.getZ();
 	}
 
 	/**
@@ -205,7 +204,7 @@ final public class Transform {
 	 * @return new float
 	 */
 	@Contract(pure = true)
-	final public float getTransformedDepth() {
+	public float getTransformedDepth() {
 		float r = this.getDepth();
 
 		if(this.getParent() != null) {
@@ -221,7 +220,7 @@ final public class Transform {
 	 * @return Transform.hasChanged
 	 */
 	@Contract(pure = true)
-	final public boolean hasChanged() {
+	public boolean hasChanged() {
 		return this.hasChanged;
 	}
 
@@ -240,9 +239,9 @@ final public class Transform {
 	 *
 	 * @param position Position to set
 	 */
-	final public void setPosition(final @NotNull Vector3f position) {
+	public void setPosition(final @NotNull Vector3f position) {
 		if(!(new Vector3f(this.getPosition(), this.getDepth()).equals(position))) {
-			this.position.setXYZAsFloat(position);
+			this.position.set(position);
 
 			this.setHasChanged(true);
 		}
@@ -253,9 +252,9 @@ final public class Transform {
 	 *
 	 * @param position Position to set
 	 */
-	final public void setPosition(final @NotNull Vector2f position) {
+	public void setPosition(final @NotNull Vector2f position) {
 		if(!this.getPosition().equals(position)) {
-			this.position.setXYAsFloat(position);
+			this.position.setXY(position);
 
 			this.setHasChanged(true);
 		}
@@ -267,7 +266,7 @@ final public class Transform {
 	 * @param x X position to set
 	 * @param y Y position to set
 	 */
-	final public void setPosition(final float x, final float y) {
+	public void setPosition(final float x, final float y) {
 		this.setPosition(new Vector2f(x, y));
 	}
 
@@ -278,7 +277,7 @@ final public class Transform {
 	 * @param y Y position to set
 	 * @param z Z position to set
 	 */
-	final public void setPosition(final float x, final float y, final float z) {
+	public void setPosition(final float x, final float y, final float z) {
 		this.setPosition(new Vector3f(x, y, z));
 	}
 
@@ -287,7 +286,7 @@ final public class Transform {
 	 *
 	 * @param rotation Rotation to set
 	 */
-	final public void setRotation(final double rotation) {
+	public void setRotation(final double rotation) {
 		if(this.getRotation() != rotation) {
 			this.rotation = rotation;
 
@@ -300,7 +299,7 @@ final public class Transform {
 	 *
 	 * @param scale Scale to set
 	 */
-	final public void setScale(final @NotNull Vector2f scale) {
+	public void setScale(final @NotNull Vector2f scale) {
 		if(!this.getScale().equals(scale)) {
 			this.scale = new Vector2f(scale);
 
@@ -314,7 +313,7 @@ final public class Transform {
 	 * @param x X scale to set
 	 * @param y Y scale to set
 	 */
-	final public void setScale(final float x, final float y) {
+	public void setScale(final float x, final float y) {
 		this.setScale(new Vector2f(x, y));
 	}
 
@@ -323,9 +322,9 @@ final public class Transform {
 	 *
 	 * @param depth Depth to set
 	 */
-	final public void setDepth(final float depth) {
+	public void setDepth(final float depth) {
 		if(this.getDepth() != depth) {
-			this.position.setZAsFloat(depth);
+			this.position.setZ(depth);
 
 			this.setHasChanged(true);
 		}

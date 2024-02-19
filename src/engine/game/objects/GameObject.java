@@ -5,12 +5,12 @@ import engine.audio.AudioObject;
 import engine.game.Transform;
 import engine.game.components.GameComponent;
 import engine.math.Vector2f;
+import engine.math.Vector3f;
 import engine.physics.PhysicsEngine;
 import engine.physics.PhysicsObject;
 import engine.rendering.shader.Shader;
 import engine.util.GameInterface;
 import engine.util.Input;
-import engine.util.Position;
 import engine.util.Units;
 import engine.util.Window;
 import org.jetbrains.annotations.Contract;
@@ -34,7 +34,7 @@ public class GameObject implements GameInterface {
 	/**
 	 * GameObject's name.
 	 */
-	private @NotNull String name;
+	final private @NotNull String name;
 
 	/**
 	 * GameObject's children.
@@ -72,14 +72,14 @@ public class GameObject implements GameInterface {
 	private boolean renderOutsideParent;
 
 	/**
-	 * GameObject's width (value in Position units and not openGL units).
+	 * GameObject's width (in openGL units).
 	 */
-	private int width;
+	private float width;
 
 	/**
-	 * GameObject's height (value in Position units and not openGL units).
+	 * GameObject's height (in openGL units).
 	 */
-	private int height;
+	private float height;
 
 	/**
 	 * Creates a new GameObject instance.
@@ -296,7 +296,7 @@ public class GameObject implements GameInterface {
 	 */
 	@Contract(pure = true)
 	final public float getWidth() {
-		return Position.convert(this.width);
+		return this.width;
 	}
 
 	/**
@@ -306,26 +306,6 @@ public class GameObject implements GameInterface {
 	 */
 	@Contract(pure = true)
 	final public float getHeight() {
-		return Position.convert(this.height);
-	}
-
-	/**
-	 * Returns the GameObject's width.
-	 *
-	 * @return GameObject.width
-	 */
-	@Contract(pure = true)
-	final public int getWidthAsInt() {
-		return this.width;
-	}
-
-	/**
-	 * Returns the GameObject's height.
-	 *
-	 * @return return GameObject.height
-	 */
-	@Contract(pure = true)
-	final public int getHeightAsInt() {
 		return this.height;
 	}
 
@@ -352,7 +332,7 @@ public class GameObject implements GameInterface {
 	 *
 	 * @return GameObject.transform.position
 	 */
-	final public @NotNull Position getPositionReference() {
+	final public @NotNull Vector3f getPositionReference() {
 		return this.getTransform().getPositionReference();
 	}
 
@@ -514,7 +494,7 @@ public class GameObject implements GameInterface {
 	 * @param width Width to set
 	 */
 	protected void setWidth(final float width) {
-		this.width = (int) Position.convert(width);
+		this.width = width;
 	}
 
 	/**
@@ -523,7 +503,7 @@ public class GameObject implements GameInterface {
 	 * @param height Height to set
 	 */
 	protected void setHeight(final float height) {
-		this.height = (int) Position.convert(height);
+		this.height = height;
 	}
 
 	/**

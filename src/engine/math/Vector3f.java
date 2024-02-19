@@ -50,14 +50,21 @@ final public class Vector3f {
 		this(r.getX(), r.getY(), z);
 	}
 
+	/**
+	 * Creates a new Vector3f instance at position (0 ; 0 ; 0).
+	 */
+	public Vector3f() {
+		this(0, 0, 0);
+	}
+
 	@Override
-	final public @NotNull String toString() {
+	public @NotNull String toString() {
 		return "(" + this.getX() + " ; " + this.getY() + " ; " + this.getZ() + ")";
 	}
 
 	@Contract(value = "null -> false", pure = true)
 	@Override
-	final public boolean equals(final Object obj) {
+	public boolean equals(final Object obj) {
 		if(!(obj instanceof Vector3f)) return false;
 
 		final Vector3f r = (Vector3f) obj;
@@ -65,15 +72,13 @@ final public class Vector3f {
 	}
 
 	/**
-	 * Returns a copy of the Vector3f lerped.
+	 * Returns the x and y coordinates as a Vector2f.
+	 * Completely ignores the y value.
 	 *
-	 * @param destination Destination to use
-	 * @param lerpFactor Lerp factor to use
-	 * @return new Vector3f
+	 * @return new Vector2f
 	 */
-	@Contract(pure = true)
-	final public @NotNull Vector3f lerp(final @NotNull Vector3f destination, final float lerpFactor) {
-		return destination.sub(this).mul(lerpFactor).add(this);
+	public Vector2f asVector2f() {
+		return new Vector2f(this.getX(), this.getY());
 	}
 
 	/**
@@ -82,7 +87,7 @@ final public class Vector3f {
 	 * @return new float
 	 */
 	@Contract(pure = true)
-	final public float maxValue() {
+	public float maxValue() {
 		float max = this.getY();
 		if(this.getX() > this.getY()) {
 			max = this.getX();
@@ -101,7 +106,7 @@ final public class Vector3f {
 	 * @return Vector3f's x position
 	 */
 	@Contract(pure = true)
-	final public float getX() {
+	public float getX() {
 		return this.x;
 	}
 
@@ -111,7 +116,7 @@ final public class Vector3f {
 	 * @return Vector3f's y position
 	 */
 	@Contract(pure = true)
-	final public float getY() {
+	public float getY() {
 		return this.y;
 	}
 
@@ -121,7 +126,7 @@ final public class Vector3f {
 	 * @return Vector3f's z position
 	 */
 	@Contract(pure = true)
-	final public float getZ() {
+	public float getZ() {
 		return this.z;
 	}
 
@@ -131,7 +136,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getXY() {
+	public @NotNull Vector2f getXY() {
 		return new Vector2f(this.getX(), this.getY());
 	}
 
@@ -141,7 +146,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getXZ() {
+	public @NotNull Vector2f getXZ() {
 		return new Vector2f(this.getX(), this.getZ());
 	}
 
@@ -151,7 +156,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getYZ() {
+	public @NotNull Vector2f getYZ() {
 		return new Vector2f(this.getY(), this.getZ());
 	}
 
@@ -162,10 +167,19 @@ final public class Vector3f {
 	 * @param y Y position to set
 	 * @param z Z position to set
 	 */
-	final public void set(final float x, final float y, final float z) {
+	public void set(final float x, final float y, final float z) {
 		this.setX(x);
 		this.setY(y);
 		this.setZ(z);
+	}
+
+	/**
+	 * Sets the Vector3f's position to the same coordinates as r.
+	 *
+	 * @param r Coordinates to set
+	 */
+	public void set(final @NotNull Vector3f r) {
+		this.set(r.getX(), r.getY(), r.getZ());
 	}
 
 	/**
@@ -173,7 +187,7 @@ final public class Vector3f {
 	 *
 	 * @param x X position to set
 	 */
-	final public void setX(final float x) {
+	public void setX(final float x) {
 		this.x = x;
 	}
 
@@ -182,7 +196,7 @@ final public class Vector3f {
 	 *
 	 * @param y Y position to set
 	 */
-	final public void setY(final float y) {
+	public void setY(final float y) {
 		this.y = y;
 	}
 
@@ -191,7 +205,7 @@ final public class Vector3f {
 	 *
 	 * @param z Z position to set
 	 */
-	final public void setZ(final float z) {
+	public void setZ(final float z) {
 		this.z = z;
 	}
 
@@ -201,7 +215,7 @@ final public class Vector3f {
 	 * @param x X position to set
 	 * @param y Y position to set
 	 */
-	final public void setXY(final float x, final float y) {
+	public void setXY(final float x, final float y) {
 		this.setX(x);
 		this.setY(y);
 	}
@@ -211,7 +225,7 @@ final public class Vector3f {
 	 *
 	 * @param r Vector2f to set
 	 */
-	final public void setXY(final @NotNull Vector2f r) {
+	public void setXY(final @NotNull Vector2f r) {
 		this.setXY(r.getX(), r.getY());
 	}
 
@@ -221,7 +235,7 @@ final public class Vector3f {
 	 * @param x X position to set
 	 * @param z Z position to set
 	 */
-	final public void setXZ(final float x, final float z) {
+	public void setXZ(final float x, final float z) {
 		this.setX(x);
 		this.setZ(z);
 	}
@@ -231,7 +245,7 @@ final public class Vector3f {
 	 *
 	 * @param r Vector2f to set
 	 */
-	final public void setXZ(final @NotNull Vector2f r) {
+	public void setXZ(final @NotNull Vector2f r) {
 		this.setXZ(r.getX(), r.getY());
 	}
 
@@ -241,7 +255,7 @@ final public class Vector3f {
 	 * @param y Y position to set
 	 * @param z Z position to set
 	 */
-	final public void setYZ(final float y, final float z) {
+	public void setYZ(final float y, final float z) {
 		this.setY(y);
 		this.setZ(z);
 	}
@@ -251,7 +265,7 @@ final public class Vector3f {
 	 *
 	 * @param r Vector2f to set
 	 */
-	final public void setYZ(final @NotNull Vector2f r) {
+	public void setYZ(final @NotNull Vector2f r) {
 		this.setYZ(r.getX(), r.getY());
 	}
 
@@ -262,7 +276,7 @@ final public class Vector3f {
 	 * @param y Y amount to add
 	 * @param z Z amount to add
 	 */
-	final public void addition(final float x, final float y, final float z) {
+	public void addition(final float x, final float y, final float z) {
 		this.set(this.getX() + x, this.getY() + y, this.getZ() + z);
 	}
 
@@ -271,7 +285,7 @@ final public class Vector3f {
 	 *
 	 * @param r Float to add
 	 */
-	final public void addition(final float r) {
+	public void addition(final float r) {
 		this.addition(r, r, r);
 	}
 
@@ -280,7 +294,7 @@ final public class Vector3f {
 	 *
 	 * @param r Vector3f to add
 	 */
-	final public void addition(final @NotNull Vector3f r) {
+	public void addition(final @NotNull Vector3f r) {
 		this.addition(r.getX(), r.getY(), r.getZ());
 	}
 
@@ -291,7 +305,7 @@ final public class Vector3f {
 	 * @param y Y amount to subtract
 	 * @param z Z amount to subtract
 	 */
-	final public void subtract(final float x, final float y, final float z) {
+	public void subtract(final float x, final float y, final float z) {
 		this.set(this.getX() - x, this.getY() - y, this.getZ() - z);
 	}
 
@@ -300,7 +314,7 @@ final public class Vector3f {
 	 *
 	 * @param r Float to subtract
 	 */
-	final public void subtract(final float r) {
+	public void subtract(final float r) {
 		this.subtract(r, r, r);
 	}
 
@@ -309,7 +323,7 @@ final public class Vector3f {
 	 *
 	 * @param r Vector3f to subtract
 	 */
-	final public void subtract(final @NotNull Vector3f r) {
+	public void subtract(final @NotNull Vector3f r) {
 		this.subtract(r.getX(), r.getY(), r.getZ());
 	}
 
@@ -320,7 +334,7 @@ final public class Vector3f {
 	 * @param y Y amount to multiply
 	 * @param z Z amount to multiply
 	 */
-	final public void multiply(final float x, final float y, final float z) {
+	public void multiply(final float x, final float y, final float z) {
 		this.set(this.getX() * x, this.getY() * y, this.getZ() * z);
 	}
 
@@ -329,7 +343,7 @@ final public class Vector3f {
 	 *
 	 * @param r Float to multiply
 	 */
-	final public void multiply(final float r) {
+	public void multiply(final float r) {
 		this.multiply(r, r, r);
 	}
 
@@ -338,7 +352,7 @@ final public class Vector3f {
 	 *
 	 * @param r Vector3f to multiply
 	 */
-	final public void multiply(final @NotNull Vector3f r) {
+	public void multiply(final @NotNull Vector3f r) {
 		this.multiply(r.getX(), r.getY(), r.getZ());
 	}
 
@@ -351,7 +365,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f add(final float x, final float y, final float z) {
+	public @NotNull Vector3f add(final float x, final float y, final float z) {
 		return new Vector3f(this.getX() + x, this.getY() + y, this.getZ() + z);
 	}
 
@@ -362,7 +376,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f add(final float r) {
+	public @NotNull Vector3f add(final float r) {
 		return this.add(r, r, r);
 	}
 
@@ -373,7 +387,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f add(final @NotNull Vector3f r) {
+	public @NotNull Vector3f add(final @NotNull Vector3f r) {
 		return this.add(r.getX(), r.getY(), r.getZ());
 	}
 
@@ -386,7 +400,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f sub(final float x, final float y, final float z) {
+	public @NotNull Vector3f sub(final float x, final float y, final float z) {
 		return new Vector3f(this.getX() - x, this.getY() - y, this.getZ() - z);
 	}
 
@@ -397,7 +411,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f sub(final float r) {
+	public @NotNull Vector3f sub(final float r) {
 		return this.sub(r, r, r);
 	}
 
@@ -408,7 +422,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f sub(final @NotNull Vector3f r) {
+	public @NotNull Vector3f sub(final @NotNull Vector3f r) {
 		return this.sub(r.getX(), r.getY(), r.getZ());
 	}
 
@@ -421,7 +435,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f mul(final float x, final float y, final float z) {
+	public @NotNull Vector3f mul(final float x, final float y, final float z) {
 		return new Vector3f(this.getX() * x, this.getY() * y, this.getZ() * z);
 	}
 
@@ -432,7 +446,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f mul(final float r) {
+	public @NotNull Vector3f mul(final float r) {
 		return this.mul(r, r, r);
 	}
 
@@ -443,7 +457,7 @@ final public class Vector3f {
 	 * @return new Vector3f
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector3f mul(final @NotNull Vector3f r) {
+	public @NotNull Vector3f mul(final @NotNull Vector3f r) {
 		return this.mul(r.getX(), r.getY(), r.getZ());
 	}
 
