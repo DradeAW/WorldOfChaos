@@ -9,6 +9,7 @@ import engine.physics.PhysicsObject;
 import engine.physics.colliders.AABBCollider;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
+import org.jetbrains.annotations.NotNull;
 
 public class TestTree extends PhysicsObject {
 
@@ -31,7 +32,7 @@ public class TestTree extends PhysicsObject {
 	}
 
 	@Override
-	public AABBCollider asCollider() {
+	public @NotNull AABBCollider asCollider() {
 		return this.asAABBCollider();
 	}
 

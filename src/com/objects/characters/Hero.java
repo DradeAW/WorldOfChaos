@@ -126,7 +126,7 @@ public class Hero extends Character {
 	}
 
 	@Override
-	public AABBCollider asCollider() {
+	public @NotNull AABBCollider asCollider() {
 		return this.asAABBCollider();
 	}
 

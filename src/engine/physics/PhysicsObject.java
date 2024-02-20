@@ -159,7 +159,7 @@ public abstract class PhysicsObject extends GameObject {
 	 *
 	 * @return float
 	 */
-	protected float getPhysicsWidth() {
+	protected float getPhysicsWidth() {  // TODO: Needs to take scale into account?
 		return this.getWidth();
 	}
 
@@ -226,7 +226,9 @@ public abstract class PhysicsObject extends GameObject {
 	 * @return new AABBCollider
 	 */
 	protected AABBCollider asAABBCollider() { // TODO: Not taking scale, rotate ... into account
-		return new AABBCollider(this.getPositionReference().getXY(), this.getPhysicsWidth(), this.getPhysicsHeight());
+		assert this.getTransform().getTransformedRotation() == 0 : "Error: AABBCollider cannot be rotated!";
+
+		return new AABBCollider(this.getPosition(), this.getPhysicsWidth(), this.getPhysicsHeight());
 	}
 
 	/**
