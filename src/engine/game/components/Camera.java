@@ -2,8 +2,9 @@ package engine.game.components;
 
 import engine.math.Matrix4f;
 import engine.math.Vector2f;
-import engine.util.Position;
+import engine.math.Vector3f;
 import engine.util.Window;
+import org.jetbrains.annotations.NotNull;
 
 final public class Camera extends GameComponent {
 
@@ -25,7 +26,7 @@ final public class Camera extends GameComponent {
 	}
 
 	@Override
-	final public Camera init() {
+	public @NotNull Camera init() {
 		this.updateProjectionMatrix();
 
 		return this;
@@ -36,7 +37,7 @@ final public class Camera extends GameComponent {
 	 *
 	 * @return Camera.transform.getTransformedPosition()
 	 */
-	final public Vector2f getPos() {
+	public Vector2f getPos() {
 		return this.getTransform().getTransformedPosition();
 	}
 
@@ -45,7 +46,7 @@ final public class Camera extends GameComponent {
 	 *
 	 * @return Camera.transform.position
 	 */
-	final public Position getPositionReference() {
+	public Vector3f getPositionReference() {
 		return this.getTransform().getPositionReference();
 	}
 
@@ -54,7 +55,7 @@ final public class Camera extends GameComponent {
 	 *
 	 * @return Camera.projectionMatrix
 	 */
-	final public Matrix4f getProjectionMatrix() {
+	public Matrix4f getProjectionMatrix() {
 		return this.projectionMatrix;
 	}
 
@@ -63,7 +64,7 @@ final public class Camera extends GameComponent {
 	 *
 	 * @return Camera has moved
 	 */
-	final public boolean hasMoved() {
+	public boolean hasMoved() {
 		return (this.lastPos == null) || (!this.lastPos.equals(this.getPos()));
 	}
 
@@ -78,7 +79,7 @@ final public class Camera extends GameComponent {
 	}
 
 	@Override
-	final public void update(final double delta) {
+	public void update(final double delta) {
 		if(this.hasMoved()) this.updateProjectionMatrix();
 
 		this.lastPos = new Vector2f(this.getPos());

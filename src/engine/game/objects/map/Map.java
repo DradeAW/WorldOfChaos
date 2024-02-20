@@ -4,7 +4,8 @@ import com.Options;
 import engine.CoreEngine;
 import engine.game.objects.GameObject;
 import engine.math.Vector2f;
-import engine.util.Position;
+import engine.math.Vector3f;
+import engine.physics.colliders.AABBCollider;
 import engine.util.Time;
 import engine.util.Window;
 import engine.util.profiling.Profiler;
@@ -61,7 +62,7 @@ public class Map extends GameObject {
 	/**
 	 * Reference to the game's Camera's position.
 	 */
-	private Position cameraPosition;
+	private Vector3f cameraPosition;
 
 	/**
 	 * Creates a new Map instance.
@@ -363,23 +364,6 @@ public class Map extends GameObject {
 	}
 
 	/**
-	 * Returns all the tiles in a certain rectangle.
-	 *
-	 * @param pos Start position (in Position units)
-	 * @param width Width (in Position units)
-	 * @param height Height(in Position units)
-	 * @return new ArrayList
-	 */
-	final public @NotNull ArrayList<Tile> getTilesOn(final @NotNull Position pos, final int width, final int height) {
-		final int xStart = (int) Math.floor((double) pos.getX() / Options.TILE_SIZE_POS);
-		final int yStart = (int) Math.floor((double) pos.getY() / Options.TILE_SIZE_POS);
-		final int w = (int) Math.ceil((double)(pos.getX() + width) / Options.TILE_SIZE_POS) - xStart;
-		final int h = (int) Math.ceil((double)(pos.getY() + height) / Options.TILE_SIZE_POS) - yStart;
-
-		return this.getTilesOn(xStart, yStart, w, h);
-	}
-
-	/**
 	 * Returns all the tiles (as an AABBCollider instance) in a certain rectangle.
 	 * Width/height = 1 means only 1 column/row.
 	 *
@@ -397,8 +381,8 @@ public class Map extends GameObject {
 			for(int j = x; j < x + width; j++) {
 				final Tile tile = this.getTileAt(j, i);
 				if(tile == null || tile.getSpeedMultiplicator() == 0 || (tile.canWalkOn() && !canWalk) || (tile.canSwimIn() && !canSwim)) { // Add collider if there might be a collision between the object and the tiles.
-					final int tileSize = (int) Position.convert(Options.TILE_SIZE);
-					colliders.add(new AABBCollider(new Position(j*tileSize, i*tileSize), tileSize, tileSize));
+					final float tileSize = Options.TILE_SIZE;
+					colliders.add(new AABBCollider(new Vector2f(j*tileSize, i*tileSize), tileSize, tileSize));
 				}
 			}
 		}
@@ -418,25 +402,6 @@ public class Map extends GameObject {
 	 */
 	final public @NotNull ArrayList<AABBCollider> getTilesOnAsColliders(final @NotNull Vector2f pos, final float width, final float height, final boolean canWalk, final boolean canSwim) {
 		return this.getTilesOnAsColliders(pos.getX(), pos.getY(), width, height, canWalk, canSwim);
-	}
-
-	/**
-	 * Returns all the AABB Colliders of the tiles in a certain rectangle.
-	 *
-	 * @param pos Start position (in Position units)
-	 * @param width Width (in Position units)
-	 * @param height Height (in Position units)
-	 * @param canWalk false = tile will be considered a collider if walkable
-	 * @param canSwim false = tile will be considered a collider if swimable
-	 * @return new ArrayList
-	 */
-	final public @NotNull ArrayList<AABBCollider> getTilesOnAsColliders(final @NotNull Position pos, final int width, final int height, final boolean canWalk, final boolean canSwim) {
-		final int xStart = (int) Math.floor((double) pos.getX() / Options.TILE_SIZE_POS);
-		final int yStart = (int) Math.floor((double) pos.getY() / Options.TILE_SIZE_POS);
-		final int w = (int) Math.ceil((double)(pos.getX() + width) / Options.TILE_SIZE_POS) - xStart;
-		final int h = (int) Math.ceil((double)(pos.getY() + height) / Options.TILE_SIZE_POS) - yStart;
-
-		return this.getTilesOnAsColliders(xStart, yStart, w, h, canWalk, canSwim);
 	}
 
 	/**
@@ -557,7 +522,7 @@ public class Map extends GameObject {
 	 *
 	 * @param cameraPosition Camera position to set
 	 */
-	private void setCameraPosition(final @NotNull Position cameraPosition) {
+	private void setCameraPosition(final @NotNull Vector3f cameraPosition) {
 		this.cameraPosition = cameraPosition;
 	}
 
