@@ -54,9 +54,64 @@ public class AABBCollider extends Collider {
 
 	@Contract(pure = true)
 	@Override
-	public @Nullable Vector2f intersect(final @NotNull Collider collider){
+	public @Nullable Vector2f intersect(final @NotNull Collider collider) {
+		if(collider instanceof AABBCollider) {
+			final AABBCollider aabbCollider = (AABBCollider) collider;
+
+			final float xOverlap = Math.min(this.getMaxX(), aabbCollider.getMaxX()) - Math.max(this.getMinX(), aabbCollider.getMinX());
+			final float yOverlap = Math.min(this.getMaxY(), aabbCollider.getMaxY()) - Math.max(this.getMinY(), aabbCollider.getMinY());
+
+			if(xOverlap < 0 || yOverlap < 0) {
+				return null;
+			}
+
+			if(xOverlap < yOverlap) {
+				return new Vector2f(xOverlap * (this.getMinX() < aabbCollider.getMinX() ? 1 : -1), 0);
+			} else {
+				return new Vector2f(0, yOverlap * (this.getMinY() < aabbCollider.getMinY() ? 1 : -1));
+			}
+		}
+
         return null; // TODO.
     }
+
+	/**
+	 * Returns the AABBCollider's x position (left side).
+	 *
+	 * @return AABBCollider.position.x
+	 */
+	public float getMinX() {
+		return this.position.getX();
+	}
+
+	/**
+	 * Returns the AABBCollider's x position (right side).
+	 *
+	 * @return AABBCollider.position.x + AABBCollider.width
+	 */
+	public float getMaxX() {
+		return this.position.getX() + this.width;
+	}
+
+
+
+	/**
+	 * Returns the AABBCollider's y position (bottom side).
+	 *
+	 * @return AABBCollider.position.y
+	 */
+	public float getMinY() {
+		return this.position.getY();
+	}
+
+	/**
+	 * Returns the AABBCollider's y position (top side).
+	 *
+	 * @return AABBCollider.position.y + AABBCollider.height
+	 */
+	public float getMaxY() {
+		return this.position.getY() + this.height;
+	}
 
 	@Contract(pure = true)
 	@Override
