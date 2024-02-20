@@ -6,6 +6,7 @@ import engine.math.Vector2f;
 import engine.physics.CollisionBehaviour;
 import engine.physics.MovementsAllowed;
 import engine.physics.PhysicsObject;
+import engine.physics.colliders.AABBCollider;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
 
@@ -20,7 +21,7 @@ public class TestTree extends PhysicsObject {
 	 * Create a new TestTree instance.
 	 */
 	public TestTree() {
-		super("Test tree", Options.TILE_SIZE, Options.TILE_SIZE * 2, CollisionBehaviour.OBJECT, MovementsAllowed.IMMOBILE);
+		super("Test tree", Options.TILE_SIZE, Options.TILE_SIZE * 2, MovementsAllowed.IMMOBILE);
 
 		this.setPosition(new Vector2f(26 * Options.TILE_SIZE, 22 * Options.TILE_SIZE));
 		this.setDepth(-0.3f);
@@ -37,11 +38,6 @@ public class TestTree extends PhysicsObject {
 	@Override
 	protected float getPhysicsHeight() {
 		return Options.TILE_SIZE / 2;
-	}
-
-	@Override
-	protected int getPhysicsHeightAsInt() {
-		return (int)(Options.TILE_SIZE_POS / 2);
 	}
 
 }

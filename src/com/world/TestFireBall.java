@@ -24,7 +24,7 @@ public class TestFireBall extends PhysicsObject {
 	 * Create a new TestFireBall instance.
 	 */
 	public TestFireBall() {
-		super("Test fire ball", Options.TILE_SIZE, Options.TILE_SIZE, CollisionBehaviour.BOUNCE, MovementsAllowed.FLY);
+		super("Test fire ball", Options.TILE_SIZE, Options.TILE_SIZE, MovementsAllowed.FLY);
 
 		this.setPosition(new Vector2f(40 * Options.TILE_SIZE, 7.5f * Options.TILE_SIZE));
 		this.setDepth(-0.3f);
@@ -40,8 +40,8 @@ public class TestFireBall extends PhysicsObject {
 	}
 
 	@Override
-	public CircleCollider asCollider() {
-		return new CircleCollider(this.getPositionReference().addXY(Options.TILE_SIZE/2, Options.TILE_SIZE/2), Options.TILE_SIZE / 2);
+	public @NotNull CircleCollider asCollider() {
+		return new CircleCollider(this.getPositionReference().add(Options.TILE_SIZE/2, Options.TILE_SIZE/2, 0.0f).getXY(), Options.TILE_SIZE / 2);
 	}
 
 	@Override

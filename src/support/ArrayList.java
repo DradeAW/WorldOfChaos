@@ -1,6 +1,6 @@
 package support;
 
-public class ArrayList<E> extends java.util.ArrayList<E>{
+public class ArrayList<E> extends java.util.ArrayList<E> { // TODO: Why do I have this?
 
 	/**
 	 * Appends the specified element to the end of this list.

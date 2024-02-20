@@ -27,7 +27,7 @@ public abstract class Character extends PhysicsObject {
 	 * /@param attribute Character's attribute
 	 */
 	public Character(final @NotNull String name, final float width, final float height/*, final @NotNull Attribute attribute*/) {
-		super(name, width, height, CollisionBehaviour.OBJECT, MovementsAllowed.ONLY_WALK);
+		super(name, width, height, MovementsAllowed.ONLY_WALK);
 
 		//this.attribute = attribute;
 	}

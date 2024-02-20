@@ -4,6 +4,7 @@ import com.Options;
 import engine.game.objects.GameObject;
 import engine.game.objects.map.Map;
 import engine.math.Vector2f;
+import engine.physics.colliders.AABBCollider;
 import engine.physics.colliders.Collider;
 import engine.util.Direction;
 import org.jetbrains.annotations.Contract;
@@ -173,26 +174,6 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
-	 * Returns the Physics's object hitbox's width as an integer.
-	 * By default, is the object's width (can be overridden).
-	 *
-	 * @return int
-	 */
-	protected int getPhysicsWidthAsInt() {
-		return this.getWidthAsInt();
-	}
-
-	/**
-	 * Returns the Physics's object hitbox's height as an integer.
-	 * By default, is the object's height (can be overridden).
-	 *
-	 * @return int
-	 */
-	protected int getPhysicsHeightAsInt() {
-		return this.getHeightAsInt();
-	}
-
-	/**
 	 * Returns the direction the Object is facing.
 	 *
 	 * @return PhysicsObject.direction
@@ -244,9 +225,9 @@ public abstract class PhysicsObject extends GameObject {
 	 *
 	 * @return new AABBCollider
 	 */
-	/*protected AABBCollider asAABBCollider() {
-		return new AABBCollider(this.getPositionReference(), this.getPhysicsWidthAsInt(), this.getPhysicsHeightAsInt());
-	}*/
+	protected AABBCollider asAABBCollider() { // TODO: Not taking scale, rotate ... into account
+		return new AABBCollider(this.getPositionReference().getXY(), this.getPhysicsWidth(), this.getPhysicsHeight());
+	}
 
 	/**
 	 * Called when (this) collides with another object.
