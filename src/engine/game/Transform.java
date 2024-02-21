@@ -68,7 +68,7 @@ final public class Transform {
 	 *
 	 * @return new Matrix4f
 	 */
-	final public @NotNull Matrix4f getTransformedTransformation() {
+	public @NotNull Matrix4f getTransformedTransformation() {
 		final boolean profiling = !Profiler.isProfileTimerRunning("Render-TransformCalc.");
 
 		if(profiling) {

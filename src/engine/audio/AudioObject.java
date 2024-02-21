@@ -47,31 +47,18 @@ public class AudioObject {
 	 */
 	public AudioObject(final String fileName) {
 		this.buffer = alGenBuffers();
-		if(alGetError() != AL_NO_ERROR) { // Checking if the buffer was correctly made.
-			System.err.println("Error while trying to generate buffer for audio.");
-			new Exception().printStackTrace();
-			//System.exit(1);
-		}
+		assert alGetError() == AL_NO_ERROR : "Error while trying to generate buffer for audio.";  // Checking if the buffer was correctly made.
 
 		// Loading the audio data and putting it in the buffer.
 		final AudioData audioData = AudioData.create(fileName);
-		if(audioData == null) {
-			System.err.println("Error while loading audio's data.");
-			System.err.println(this);
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		assert audioData != null : "Error while loading audio's data.";
 
 		alBufferData(this.buffer, audioData.getFormat(), audioData.getData(), audioData.getSampleRate());
 		audioData.dispose();
 
 		// Creates the source of the buffer.
 		this.source = alGenSources();
-		if(alGetError() != AL_NO_ERROR) {
-			System.err.println("Error while trying to generate source for audio.");
-			new Exception().printStackTrace();
-			//System.exit(1);
-		}
+		assert alGetError() == AL_NO_ERROR : "Error while trying to generate source for audio.";
 
 		alSourcei(this.source, AL_BUFFER, this.buffer);
 		alSourcef(this.source, AL_REFERENCE_DISTANCE, 1.0f); // TODO: Shouldn't be here.
@@ -97,7 +84,7 @@ public class AudioObject {
 	}
 
 	/**
-	 * Tells whether or not the audio should loop.
+	 * Tells whether the audio should loop.
 	 *
 	 * @param loops true = audio loops
 	 */

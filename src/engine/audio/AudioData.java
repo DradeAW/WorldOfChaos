@@ -111,34 +111,23 @@ class AudioData {
 
 		// Getting the channels
 		final int sampleSize = format.getSampleSizeInBits();
-		final int channels;
+		int channels = 0;
 
 		switch(format.getChannels()) {
 			case 1:
 				if(sampleSize == 8) channels = AL_FORMAT_MONO8;
 				else if(sampleSize == 16) channels = AL_FORMAT_MONO16;
-				else {
-					channels = 0;
-					System.err.println("Error: illegal sample size, only accept mono 8 and 16.");
-					new Exception().printStackTrace();
-					System.exit(1);
-				}
+				else
+					assert false : "Error: illegal sample size, only accept mono 8 and 16.";
 				break;
 			case 2:
 				if(sampleSize == 8) channels = AL_FORMAT_STEREO8;
 				else if(sampleSize == 16) channels = AL_FORMAT_STEREO16;
-				else {
-					channels = 0;
-					System.err.println("Error: illegal sample size, only accept stereo 8 and 16.");
-					new Exception().printStackTrace();
-					System.exit(1);
-				}
+				else
+					assert false : "Error: illegal sample size, only accept stereo 8 and 16.";
 				break;
 			default:
-				channels = 0;
-				System.err.println("Only mono and stereo is supported");
-				new Exception().printStackTrace();
-				System.exit(1);
+				assert false : "Error: illegal number of channels, only accept mono and stereo.";
 		}
 
 		// Reading data into a buffer
@@ -173,7 +162,7 @@ class AudioData {
 	 * @param order Order
 	 * @return new ByteBuffer
 	 */
-	private static @NotNull ByteBuffer convertAudioBytes(final @NotNull  byte[] audio_bytes, final boolean two_bytes_data, final @NotNull ByteOrder order) {
+	private static @NotNull ByteBuffer convertAudioBytes(final byte[] audio_bytes, final boolean two_bytes_data, final @NotNull ByteOrder order) {
 		final ByteBuffer dest = ByteBuffer.allocateDirect(audio_bytes.length);
 		dest.order(ByteOrder.nativeOrder());
 		final ByteBuffer src = ByteBuffer.wrap(audio_bytes);

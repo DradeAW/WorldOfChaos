@@ -71,9 +71,7 @@ abstract public class CoreGame implements GameInterface {
 
 	@Override
 	final public void render(final @NotNull Shader shader, final @Nullable ArrayList<GameComponent> renderLater) {
-		System.err.println("Error: CoreGame.render should never be called.");
-		new Exception().printStackTrace();
-		System.exit(1);
+		assert false : "Error: CoreGame.render should never be called.";
 	}
 
 	@Override

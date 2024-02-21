@@ -168,7 +168,7 @@ public class GameObject implements GameInterface {
 	 *
 	 * @param coreEngine Core engine to set
 	 */
-	public void addToEngine(final CoreEngine coreEngine) {
+	public void addToEngine(final @NotNull CoreEngine coreEngine) {
 		this.coreEngine = coreEngine;
 
 		for(final @NotNull GameObject object : this.getChildren()) {
@@ -196,7 +196,7 @@ public class GameObject implements GameInterface {
 	 * @return GameObject.coreEngine
 	 */
 	@Contract(pure = true)
-	final protected CoreEngine getCoreEngine() {
+	final protected @Nullable CoreEngine getCoreEngine() {
 		return this.coreEngine;
 	}
 
@@ -342,12 +342,7 @@ public class GameObject implements GameInterface {
 	 * @return new Vector2f | null if not in screen
 	 */
 	final protected @Nullable Vector2f getPositionOnScreen() {
-		if(this.getCoreEngine() == null) {
-			System.err.println("Error: Core Engine has not been set and call on getPositionOnScreen()");
-			System.err.println(this + "\n");
-			new Exception().printStackTrace();
-			return null;
-		}
+		assert this.getCoreEngine() != null : "Error: Core Engine has not been set and call on getPositionOnScreen()\n" + this;
 
 		final Vector2f cameraPosition = this.getCoreEngine().getRenderingEngine().getMainCamera().getPos();
 		final Vector2f bottomLeftCorner = cameraPosition.sub(Window.getRatio(), 1);

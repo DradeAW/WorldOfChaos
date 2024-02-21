@@ -150,7 +150,7 @@ public class Map extends GameObject {
 	}
 
 	@Override
-	public void addToEngine(final CoreEngine engine) {
+	public void addToEngine(final @NotNull CoreEngine engine) {
 		super.addToEngine(engine);
 
 		this.setCameraPosition(engine.getRenderingEngine().getMainCamera().getPositionReference());

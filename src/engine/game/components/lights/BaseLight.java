@@ -37,7 +37,7 @@ public class BaseLight extends GameComponent {
 	}
 
 	@Override
-	public void addToEngine(final CoreEngine coreEngine) {
+	public void addToEngine(final @NotNull CoreEngine coreEngine) {
 		coreEngine.getRenderingEngine().addLight(this);
 	}
 

@@ -35,7 +35,7 @@ final public class AudioEngine {
 	/**
 	 * Updates the AudioEngine.
 	 */
-	final public void update() {
+	public void update() {
 		alListenerf(AL_GAIN, GameOptions.getSlide("generalVolume").getValue()*0.01f);
 		if(Hero.getInstance() != null) {
 			alListener3f(AL_POSITION, Hero.getInstance().getPosition().getX(), Hero.getInstance().getPosition().getY(), 0.0f);
@@ -45,16 +45,13 @@ final public class AudioEngine {
 			alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
 		}
 
-		if(alGetError() != AL_NO_ERROR) {
-			System.err.println("Error in the audio engine");
-			new Exception().printStackTrace();
-		}
+		assert alGetError() == AL_NO_ERROR : "Error in the audio engine";
 	}
 
 	/**
 	 * Called when application closes.
 	 */
-	final public void cleanUp() {
+	public void cleanUp() {
 		AL.destroy();
 	}
 

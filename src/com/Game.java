@@ -47,7 +47,7 @@ final public class Game extends CoreGame {
 	}
 
 	@Override
-	final public @NotNull Game init() {
+	public @NotNull Game init() {
 		FontLoader.loadAll();
 
 		this.load = Game.LOAD_NONE;
@@ -60,7 +60,7 @@ final public class Game extends CoreGame {
 	}
 
 	@Override
-	final public void update(final double delta) {
+	public void update(final double delta) {
 		if(this.load == Game.LOAD_MENU) {
 			if(this.getWorldObject() != null) {
 				this.removeFromRootObject(this.getWorldObject());
@@ -90,14 +90,14 @@ final public class Game extends CoreGame {
 	/**
 	 * Loads the menu.
 	 */
-	final public void loadMenu() {
+	public void loadMenu() {
 		this.load = Game.LOAD_MENU;
 	}
 
 	/**
 	 * Loads the world.
 	 */
-	final public void loadWorld() {
+	public void loadWorld() {
 		this.load = Game.LOAD_WORLD;
 	}
 
