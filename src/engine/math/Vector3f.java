@@ -71,6 +71,16 @@ final public class Vector3f {
 		return this.getX() == r.getX() && this.getY() == r.getY() && this.getZ() == r.getZ();
 	}
 
+	@Override
+	public int hashCode() {
+		float hash = 1;
+		hash = hash * 7 + this.getX();
+		hash = hash * 3 + this.getY();
+		hash = hash * 23 + this.getZ();
+
+		return (int) hash;
+	}
+
 	/**
 	 * Returns the x and y coordinates as a Vector2f.
 	 * Completely ignores the y value.

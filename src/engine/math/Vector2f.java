@@ -192,33 +192,10 @@ final public class Vector2f {
 	public @NotNull Vector2f max(final @NotNull Vector2f r) {
 		final Vector2f a = new Vector2f();
 
-		if(this.getX() > r.getX()) {
-			a.setX(this.getX());
-		} else {
-			a.setX(r.getX());
-		}
-
-		if(this.getY() > r.getY()) {
-			a.setY(this.getY());
-		} else {
-			a.setY(r.getY());
-		}
+		a.setX(Math.max(this.getX(), r.getX()));
+		a.setY(Math.max(this.getY(), r.getY()));
 
 		return a;
-	}
-
-	/**
-	 * Returns the max value between x & y.
-	 *
-	 * @return new float
-	 */
-	@Contract(pure = true)
-	public float maxValue() {
-		if(this.getX() > this.getY()) {
-			return this.getX();
-		} else {
-			return this.getY();
-		}
 	}
 
 	/**

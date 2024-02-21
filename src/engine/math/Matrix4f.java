@@ -8,7 +8,7 @@ final public class Matrix4f{
 	/**
 	 * Matrix value.
 	 */
-	private @NotNull float[][] m;
+	private float[][] m;
 
 	/**
 	 * Creates a new Matrix4f instance.
@@ -27,17 +27,17 @@ final public class Matrix4f{
 	}
 
 	@Override
-	final public String toString() {
-		String string = super.toString() + "\n";
+	public String toString() {
+		final StringBuilder string = new StringBuilder(super.toString() + "\n");
 
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 4; j++) {
-				string += this.get(j, i) + " ";
+				string.append(this.get(j, i)).append(" ");
 			}
-			string += "\n";
+			string.append("\n");
 		}
 
-		return string;
+		return string.toString();
 	}
 
 	/**
@@ -45,7 +45,7 @@ final public class Matrix4f{
 	 *
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initIdentity() {
+	public @NotNull Matrix4f initIdentity() {
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 4; j++) {
 				this.set(i, j, i == j ? 1 : 0);
@@ -63,7 +63,7 @@ final public class Matrix4f{
 	 * @param z Z position to set
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initPosition(final float x, final float y, final float z) {
+	public @NotNull Matrix4f initPosition(final float x, final float y, final float z) {
 		this.initIdentity();
 		this.set(0, 3, x);
 		this.set(1, 3, y);
@@ -78,7 +78,7 @@ final public class Matrix4f{
 	 * @param r Position to set
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initPosition(final @NotNull Vector2f r) {
+	public @NotNull Matrix4f initPosition(final @NotNull Vector2f r) {
 		return this.initPosition(r.getX(), r.getY(), 0);
 	}
 
@@ -90,7 +90,7 @@ final public class Matrix4f{
 	 * @param z Rotation around the z axis (in radians)
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initRotation(final double x, final double y, final double z) {
+	public @NotNull Matrix4f initRotation(final double x, final double y, final double z) {
 		final Matrix4f rx = new Matrix4f().initIdentity();
 		final Matrix4f ry = new Matrix4f().initIdentity();
 		final Matrix4f rz = new Matrix4f().initIdentity();
@@ -128,7 +128,7 @@ final public class Matrix4f{
 	 * @param z Scale for z
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initScale(final float x, final float y, final float z) {
+	public @NotNull Matrix4f initScale(final float x, final float y, final float z) {
 		this.initIdentity();
 		this.set(0, 0, x);
 		this.set(1, 1, y);
@@ -143,7 +143,7 @@ final public class Matrix4f{
 	 * @param r Scale to set
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initScale(final @NotNull Vector2f r) {
+	public @NotNull Matrix4f initScale(final @NotNull Vector2f r) {
 		return this.initScale(r.getX(), r.getY(), 1);
 	}
 
@@ -153,7 +153,7 @@ final public class Matrix4f{
 	 * @param ratio Window's ratio (width / height)
 	 * @return this
 	 */
-	final public @NotNull Matrix4f initProjection(final float ratio) {
+	public @NotNull Matrix4f initProjection(final float ratio) {
 		this.initIdentity();
 
 		final float zNear = 0.01f;
@@ -174,7 +174,7 @@ final public class Matrix4f{
 	 * @return multiplication between the Matrix4f and r
 	 */
 	@Contract(pure = true)
-	final public @NotNull Matrix4f mul(final @NotNull Matrix4f r) {
+	public @NotNull Matrix4f mul(final @NotNull Matrix4f r) {
 		final Matrix4f result = new Matrix4f();
 
 		for(int i = 0; i < 4; i++) {
@@ -196,13 +196,11 @@ final public class Matrix4f{
 	 *
 	 * @return Matrix4f's value
 	 */
-	final public @NotNull float[][] getM() {
+	public float[][] getM() {
 		final float[][] m = new float[4][4];
 
 		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 4; j++) {
-				m[i][j] = this.m[i][j];
-			}
+			System.arraycopy(this.m[i], 0, m[i], 0, 4);
 		}
 
 		return m;
@@ -216,7 +214,7 @@ final public class Matrix4f{
 	 * @return Matrix4f's value[x][y]
 	 */
 	@Contract(pure = true)
-	final public float get(final int x, final int y) {
+	public float get(final int x, final int y) {
 		return this.m[x][y];
 	}
 
@@ -226,7 +224,7 @@ final public class Matrix4f{
 	 * @param m Value to set
 	 * @throws IllegalArgumentException if m is not a float[4][4]
 	 */
-	final public void setM(final @NotNull float[][] m) {
+	public void setM(final float[][] m) {
 		if(m.length != 4) {
 			System.err.println("Error: The value to set in the Matrix4f must be a float[4][4]\nValue set: float[" + m.length + "][" + (m.length == 0 ? "null" : ("[" + m[0].length) + "]"));
 			throw new IllegalArgumentException();
@@ -250,7 +248,7 @@ final public class Matrix4f{
 	 * @param value Value to set
 	 * @throws IllegalArgumentException if x or y are not between 0 and 3
 	 */
-	final public void set(final int x, final int y, final float value) {
+	public void set(final int x, final int y, final float value) {
 		if(x < 0 || x > 3 || y < 0 || y > 3) {
 			System.err.println("Error: Matrix4f.set() must have an x and y value between 0 and 3. x=" + x + " & y=" + y);
 			throw new IllegalArgumentException();
