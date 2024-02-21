@@ -87,12 +87,8 @@ final public class CoreEngine {
 	/**
 	 * Creates a window, initializes the graphics and then, runs the engine.
 	 */
-	final public void start() {
-		if(this.isRunning) {
-			System.err.println("Couldn't start the CoreEngine: Engine already running.");
-			new Exception().printStackTrace();
-			return;
-		}
+	public void start() {
+		assert !this.isRunning : "Couldn't start the CoreEngine: Engine already running.";
 
 		if(Options.DEBUG) System.out.println("CoreEngine is starting.");
 
@@ -229,12 +225,8 @@ final public class CoreEngine {
 	/**
 	 * Stops the engine and the application cleanly.
 	 */
-	final public void stop() {
-		if(!this.isRunning) {
-			System.err.println("Couldn't stops the CoreEngine: Engine is not running.");
-			new Exception().printStackTrace();
-			return;
-		}
+	public void stop() {
+		assert this.isRunning : "Couldn't stops the CoreEngine: Engine is not running.";
 
 		this.isRunning = false;
 

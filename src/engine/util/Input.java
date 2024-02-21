@@ -8,10 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import support.ArrayList;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 final public class Input {
 

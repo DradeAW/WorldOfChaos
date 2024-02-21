@@ -58,7 +58,7 @@ final public class Mesh {
 	}
 
 	@Override
-	final protected void finalize() {
+	protected void finalize() {
 		try {
 			super.finalize();
 		} catch(final Throwable e) {
@@ -93,7 +93,7 @@ final public class Mesh {
 	 *
 	 * @param vertices Vertex[] to set
 	 */
-	final public void setVertices(final @NotNull Vertex[] vertices) {
+	public void setVertices(final @NotNull Vertex[] vertices) {
 		this.size = vertices.length;
 
 		glBindVertexArray(this.vao);
@@ -123,7 +123,7 @@ final public class Mesh {
 	/**
 	 * Draws the Mesh on the screen.
 	 */
-	final public void draw() {
+	public void draw() {
 		glBindVertexArray(this.vao);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

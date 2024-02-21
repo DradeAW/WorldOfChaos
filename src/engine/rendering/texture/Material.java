@@ -40,7 +40,7 @@ final public class Material {
 	 *
 	 * @param delta Delta
 	 */
-	final public void update(final double delta) {
+	public void update(final double delta) {
 		this.getImage().update(delta);
 	}
 
@@ -50,7 +50,7 @@ final public class Material {
 	 * @return Material.image
 	 */
 	@Contract(pure = true)
-	final public @NotNull Image getImage() {
+	public @NotNull Image getImage() {
 		return this.image;
 	}
 
@@ -59,7 +59,7 @@ final public class Material {
 	 *
 	 * @return Material.image.texture
 	 */
-	final public @NotNull Texture getTexture() {
+	public @NotNull Texture getTexture() {
 		return this.getImage().getTexture();
 	}
 
@@ -69,7 +69,7 @@ final public class Material {
 	 * @return Material's color
 	 */
 	@Contract(pure = true)
-	final public @NotNull Color getColor() {
+	public @NotNull Color getColor() {
 		return this.color;
 	}
 
@@ -79,7 +79,7 @@ final public class Material {
 	 * @param image Image to set
 	 * @param color Color to set
 	 */
-	final public void set(final Image image, final Color color) {
+	public void set(final Image image, final Color color) {
 		this.setImage(image);
 		this.setColor(color);
 	}
@@ -89,7 +89,7 @@ final public class Material {
 	 *
 	 * @param image Image to set
 	 */
-	final public void setImage(final @NotNull Image image) {
+	public void setImage(final @NotNull Image image) {
 		this.image = image;
 	}
 
@@ -98,7 +98,7 @@ final public class Material {
 	 *
 	 * @param color Color to set
 	 */
-	final public void setColor(final @NotNull Color color) {
+	public void setColor(final @NotNull Color color) {
 		this.color = color;
 	}
 

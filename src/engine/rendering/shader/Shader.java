@@ -31,7 +31,7 @@ public class Shader {
 	/**
 	 * Pointer to the rendering engine.
 	 */
-	private @NotNull RenderingEngine renderingEngine;
+	private RenderingEngine renderingEngine;
 
 	/**
 	 * Creates a new Shader instance.
@@ -42,11 +42,7 @@ public class Shader {
 		this.program = glCreateProgram();
 		this.uniforms = new HashMap<>();
 
-		if(this.program == 0) { // Invalid memory location
-			System.err.println("Error, " + name + " Shader's creation failed: Could not find valid memory location for program.");
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		assert this.program != 0 : "Error, " + name + " Shader's creation failed: Could not find valid memory location for program.";  // Invalid memory location.
 
 		this.addVertexShader(Shader.load(name + ".vs"));
 		this.addFragmentShader(Shader.load(name + ".fs"));
@@ -68,11 +64,11 @@ public class Shader {
 		}
 
 		// TODO
-		//glDetachShader(this.program, vsId);
-		//glDetachShader(this.program, fsId);
+		// glDetachShader(this.program, vsId);
+		// glDetachShader(this.program, fsId);
 
-		//glDeleteShader(vsId);
-		//glDeleteShader(fsId);
+		// glDeleteShader(vsId);
+		// glDeleteShader(fsId);
 		glDeleteProgram(this.program);
 	}
 
@@ -135,21 +131,11 @@ public class Shader {
 	 */
 	private void addToProgram(final String text, final int type) {
 		final int shader = glCreateShader(type);
-
-		if(shader == 0) {
-			System.err.println("Shader creation failed: Could not find valid memory location when adding shader.");
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		assert shader != 0 : "Error: Shader creation failed: Could not find valid memory location when adding shader.";
 
 		glShaderSource(shader, text);
 		glCompileShader(shader);
-
-		if(glGetShaderi(shader, GL_COMPILE_STATUS) == 0) {
-			System.err.println(glGetShaderInfoLog(shader, 1024));
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		assert glGetShaderi(shader, GL_COMPILE_STATUS) != 0 : glGetShaderInfoLog(shader, 1024);
 
 		glAttachShader(this.program, shader);
 	}
@@ -159,18 +145,10 @@ public class Shader {
 	 */
 	final public void compile() {
 		glLinkProgram(this.program);
-
-		if(glGetProgrami(this.program, GL_LINK_STATUS) == 0) {
-			System.err.println(glGetProgramInfoLog(this.program, 1024));
-			System.exit(1);
-		}
+		assert glGetProgrami(this.program, GL_LINK_STATUS) != 0 : glGetProgramInfoLog(this.program, 1024);
 
 		glValidateProgram(this.program);
-
-		if(glGetProgrami(this.program, GL_VALIDATE_STATUS) == 0) {
-			System.err.println(glGetProgramInfoLog(this.program, 1024));
-			System.exit(1);
-		}
+		assert glGetProgrami(this.program, GL_VALIDATE_STATUS) != 0 : glGetProgramInfoLog(this.program, 1024);
 	}
 
 	/**
@@ -223,12 +201,7 @@ public class Shader {
 	 */
 	final public void addUniform(final @NotNull String uniformName) {
 		final int uniformLocation = glGetUniformLocation(this.program, uniformName);
-
-		if(uniformLocation == 0xFFFFFFFF) { // Uniform not found
-			System.err.println("Error: Could not find uniform: " + uniformName);
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		assert uniformLocation != 0xFFFFFFFF : "Error: Could not find uniform: " + uniformName;  // Uniform not found.
 
 		this.uniforms.put(uniformName, uniformLocation);
 	}

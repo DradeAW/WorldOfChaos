@@ -9,8 +9,8 @@ import engine.util.Window;
 import engine.util.profiling.Profiler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import support.ArrayList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;

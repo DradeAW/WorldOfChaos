@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -26,7 +25,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 
-final public class File{
+final public class File {
 
 	/**
 	 * Get an image according to the filename, cuts the program if fails.
@@ -210,11 +209,8 @@ final public class File{
 		}
 
 		final java.io.File folder = new java.io.File(folderPath);
-		if(!folder.mkdirs()) {
-			System.err.println("Error: Couldn't create folder to write to file \"" + fileName + "\"");
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		folder.mkdirs();
+		assert folder.exists() : "Error: Couldn't create folder to write to file \"" + fileName + "\"";
 
 		final java.io.File file = new java.io.File(folderPath + fileName.substring(fileName.lastIndexOf('/')));
 

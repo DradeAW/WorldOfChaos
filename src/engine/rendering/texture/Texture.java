@@ -128,7 +128,7 @@ final public class Texture extends Image {
 	}
 
 	@Override
-	final protected void finalize() {
+	protected void finalize() {
 		try {
 			super.finalize();
 		} catch(final Throwable e) {
@@ -149,12 +149,8 @@ final public class Texture extends Image {
 	 * @param params Texture's parameters: 0 = id, 1 = width, 2 = height
 	 * @param attachment Texture's attachment
 	 */
-	private void createTexture(final @NotNull int[] params, final int attachment) {
-		if(params.length < 3) {
-			System.err.println("Error: params has a length of " + params.length + ", 3 params are required.");
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+	private void createTexture(final int[] params, final int attachment) {
+		assert params.length == 3 : "Error: params has a length of " + params.length + ", 3 params are required.";
 
 		final int id = params[0];
 		final int width = params[1];
@@ -173,14 +169,7 @@ final public class Texture extends Image {
 			}
 
 			glDrawBuffer(attachment == GL_DEPTH_ATTACHMENT ? GL_NONE : attachment);
-
-			if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-				System.err.println("FrameBuffer creation failed.");
-				System.err.println("This might be caused by the texture size that is too big:");
-				System.err.println("Width: " + width + "px ; Height: " + height + "px");
-				new Exception().printStackTrace();
-				System.exit(1);
-			}
+			assert glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE : "FrameBuffer creation failed.\nThis might be caused by the texture size that is too big:\nWidth: " + width + "px ; Height: " + height + "px";
 		}
 
 		this.resource = new TextureResource(id, fbo, width, height, attachment);
@@ -188,21 +177,21 @@ final public class Texture extends Image {
 
 	@Override
 	@Contract(pure = true)
-	final @NotNull Texture getTexture() {
+	@NotNull Texture getTexture() {
 		return this;
 	}
 
 	/**
 	 * Binds the Texture to tell OpenGL to use it.
 	 */
-	final public void bind() {
+	public void bind() {
 		glBindTexture(GL_TEXTURE_2D, this.getID());
 	}
 
 	/**
 	 * Binds the Texture to render into it.
 	 */
-	final public void bindAsRenderTarget() {
+	public void bindAsRenderTarget() {
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this.getFBO());
 		glViewport(0, 0, this.getWidth(), this.getHeight());
 	}
@@ -223,7 +212,7 @@ final public class Texture extends Image {
 	 * @return Texture.resource.id
 	 */
 	@Contract(pure = true)
-	final public int getID() {
+	public int getID() {
 		return this.getResource().getID();
 	}
 
@@ -233,7 +222,7 @@ final public class Texture extends Image {
 	 * @return Texture.resource.width
 	 */
 	@Contract(pure = true)
-	final public int getWidth() {
+	public int getWidth() {
 		return this.getResource().getWidth();
 	}
 
@@ -243,7 +232,7 @@ final public class Texture extends Image {
 	 * @return Texture.resource.height
 	 */
 	@Contract(pure = true)
-	final public int getHeight() {
+	public int getHeight() {
 		return this.getResource().getHeight();
 	}
 
@@ -253,7 +242,7 @@ final public class Texture extends Image {
 	 * @return Texture.filename
 	 */
 	@Contract(pure = true)
-	final public @Nullable String getFilename() {
+	public @Nullable String getFilename() {
 		return this.filename;
 	}
 
@@ -284,13 +273,8 @@ final public class Texture extends Image {
 	 * @param height Texture's height
 	 * @return new int[3]
 	 */
-	private static @NotNull int[] create(final int width, final int height) {
-		if(width < 1 || height < 1) {
-			System.err.println("Error: width and height should be at least 1,");
-			System.err.println("width: " + width + " ; height: " + height);
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+	private static int[] create(final int width, final int height) {
+		assert width > 0 && height > 0 : "Error: width and height should be at least 1,\nwidth: " + width + " ; height: " + height;
 
 		return Texture.generateTexture(width, height, true, new int[width * height]);
 	}
@@ -301,7 +285,7 @@ final public class Texture extends Image {
 	 * @param filename File name
 	 * @return new int[3]
 	 */
-	private static @NotNull int[] load(final @NotNull String filename) {
+	private static int[] load(final @NotNull String filename) {
 		String fileName = "/media/texture/" + filename + ".png";
 
 		BufferedImage img = support.File.getImage(fileName, false);
@@ -332,7 +316,7 @@ final public class Texture extends Image {
 	 * @param pixels Texture's pixels
 	 * @return new int[3]
 	 */
-	private static @NotNull int[] generateTexture(final int width, final int height, final boolean hasAlpha, final int[] pixels) {
+	private static int @NotNull [] generateTexture(final int width, final int height, final boolean hasAlpha, final int[] pixels) {
 		final ByteBuffer buffer = BufferUtil.createFlippedBuffer(width, height, hasAlpha, pixels);
 
 		final int id = glGenTextures();

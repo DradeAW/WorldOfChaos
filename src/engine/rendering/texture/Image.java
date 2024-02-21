@@ -2,7 +2,7 @@ package engine.rendering.texture;
 
 import org.jetbrains.annotations.NotNull;
 
-abstract class Image {
+abstract public class Image {
 
 	/**
 	 * Returns the Image's texture.

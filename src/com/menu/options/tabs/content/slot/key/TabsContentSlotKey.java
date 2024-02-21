@@ -5,7 +5,8 @@ import com.menu.options.tabs.content.TabsContent;
 import com.menu.options.tabs.content.slot.TabsContentSlot;
 import engine.math.Vector2f;
 import engine.util.Input;
-import support.ArrayList;
+
+import java.util.ArrayList;
 
 public class TabsContentSlotKey extends TabsContentSlot {
 

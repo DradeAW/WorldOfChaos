@@ -48,7 +48,7 @@ final public class Vertex {
 	 * @return Vertex's position
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getPos() {
+	public @NotNull Vector2f getPos() {
 		return this.position;
 	}
 
@@ -58,7 +58,7 @@ final public class Vertex {
 	 * @return Vertex's texture coordinates
 	 */
 	@Contract(pure = true)
-	final public @NotNull Vector2f getTextureCoords() {
+	public @NotNull Vector2f getTextureCoords() {
 		return this.textureCoords;
 	}
 
@@ -68,7 +68,7 @@ final public class Vertex {
 	 * @return new float[4]
 	 */
 	@Contract(pure = true)
-	final public @NotNull float[] getElements() {
+	public float[] getElements() {
 		return new float[] {
 			this.getPos().getX(),
 			this.getPos().getY(),
@@ -84,7 +84,7 @@ final public class Vertex {
 	 *
 	 * @param position Position to set
 	 */
-	final public void setPos(final @NotNull Vector2f position) {
+	public void setPos(final @NotNull Vector2f position) {
 		this.position = position;
 	}
 
@@ -95,7 +95,7 @@ final public class Vertex {
 	 *
 	 * @param textureCoords Position to set
 	 */
-	final public void setTextureCoords(final @NotNull Vector2f textureCoords) {
+	public void setTextureCoords(final @NotNull Vector2f textureCoords) {
 		this.textureCoords = textureCoords;
 	}
 
@@ -105,7 +105,7 @@ final public class Vertex {
 	 * @param position Position to set
 	 * @param textureCoords Texture coordinates to set
 	 */
-	final public void set(final @NotNull Vector2f position, final @NotNull Vector2f textureCoords) {
+	public void set(final @NotNull Vector2f position, final @NotNull Vector2f textureCoords) {
 		this.setPos(position);
 		this.setTextureCoords(textureCoords);
 	}

@@ -225,7 +225,7 @@ public abstract class PhysicsObject extends GameObject {
 	 *
 	 * @return new AABBCollider
 	 */
-	protected AABBCollider asAABBCollider() { // TODO: Not taking scale, rotate ... into account
+	protected AABBCollider asAABBCollider() { // TODO: Not taking scale into account
 		assert this.getTransform().getTransformedRotation() == 0 : "Error: AABBCollider cannot be rotated!";
 
 		return new AABBCollider(this.getPosition(), this.getPhysicsWidth(), this.getPhysicsHeight());

@@ -81,7 +81,7 @@ final public class RenderingEngine {
 	 *
 	 * @param object Object to render
 	 */
-	final public void render(final @NotNull GameObject object) {
+	public void render(final @NotNull GameObject object) {
 		Profiler.startProfileTimer("Render-WindowClear");
 		Window.bindAsRenderTarget();
 		RenderingEngine.clearScreen();
@@ -119,7 +119,7 @@ final public class RenderingEngine {
 	 * @return RenderingEngine.ambientLight
 	 */
 	@Contract(pure = true)
-	final public @NotNull Color getAmbientLight() {
+	public @NotNull Color getAmbientLight() {
 		return this.ambientLight;
 	}
 
@@ -139,7 +139,7 @@ final public class RenderingEngine {
 	 * @return RenderingEngine.activeLight
 	 */
 	@Contract(pure = true)
-	final public BaseLight getActiveLight() {
+	public BaseLight getActiveLight() {
 		return this.activeLight;
 	}
 
@@ -148,7 +148,7 @@ final public class RenderingEngine {
 	 *
 	 * @param light Light to add
 	 */
-	final public void addLight(final BaseLight light) {
+	public void addLight(final BaseLight light) {
 		this.getLights().add(light);
 	}
 
@@ -176,7 +176,7 @@ final public class RenderingEngine {
 	 * @return RenderingEngine.mainCamera
 	 */
 	@Contract(pure = true)
-	final public @NotNull Camera getMainCamera() {
+	public @NotNull Camera getMainCamera() {
 		return this.mainCamera;
 	}
 
@@ -185,7 +185,7 @@ final public class RenderingEngine {
 	 *
 	 * @param camera Camera to set
 	 */
-	final public void setMainCamera(final @NotNull Camera camera) {
+	public void setMainCamera(final @NotNull Camera camera) {
 		this.mainCamera = camera;
 	}
 
