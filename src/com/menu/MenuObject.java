@@ -56,32 +56,11 @@ final public class MenuObject extends GameObject {
 		this.setPosition(new Vector2f(-1 * Window.getRatio(), -1));
 		this.setDepth(MenuObject.DEPTH);
 
-		final Material animationMaterial = new Material(new Animation(new Texture[] {
-			new Texture("/menu/background-1"),
-			new Texture("/menu/background-2"),
-			new Texture("/menu/background-3"),
-			new Texture("/menu/background-4"),
-			new Texture("/menu/background-5"),
-			new Texture("/menu/background-6"),
-			new Texture("/menu/background-7"),
-			new Texture("/menu/background-8"),
-			new Texture("/menu/background-9"),
-			new Texture("/menu/background-10"),
-			new Texture("/menu/background-11"),
-			new Texture("/menu/background-12"),
-			new Texture("/menu/background-13"),
-			new Texture("/menu/background-14"),
-			new Texture("/menu/background-15"),
-			new Texture("/menu/background-16"),
-			new Texture("/menu/background-17"),
-			new Texture("/menu/background-18"),
-			new Texture("/menu/background-19"),
-			new Texture("/menu/background-20"),
-			new Texture("/menu/background-21"),
-			new Texture("/menu/background-22"),
-			new Texture("/menu/background-23"),
-			new Texture("/menu/background-24")
-		}, 4f));
+		final Texture[] textures = new Texture[24];
+		for(int i = 0; i < 24; i++)
+			textures[i] = new Texture("/menu/background-" + (i + 1));
+
+		final Material animationMaterial = new Material(new Animation(textures, 4f));
 		final RenderedComponent renderedComponent = new RenderedComponent(animationMaterial, 2 * Window.getRatio(), 2);
 		this.addComponent(renderedComponent);
 
@@ -117,7 +96,7 @@ final public class MenuObject extends GameObject {
 	}
 
 	@Override
-	final public @NotNull MenuObject init() {
+	public @NotNull MenuObject init() {
 		final Camera camera = new Camera();
 
 		final MenuCameraObject cameraObject = new MenuCameraObject(camera);
@@ -131,7 +110,7 @@ final public class MenuObject extends GameObject {
 	}
 
 	@Override
-	final public void update(final double delta) {
+	public void update(final double delta) {
 		super.update(delta);
 
 		if(this.optionsPanelOn && !this.getChildren().contains(this.getOptionsPanel())) {
@@ -146,7 +125,7 @@ final public class MenuObject extends GameObject {
 	/**
 	 * Adds an options panel.
 	 */
-	final public void addOptionsPanel() {
+	public void addOptionsPanel() {
 		this.optionsPanelOn = true;
 		Button.GLOBAL_ACTIVATION = (byte) 1;
 	}
@@ -154,7 +133,7 @@ final public class MenuObject extends GameObject {
 	/**
 	 * Removes the options panel.
 	 */
-	final public void removeOptionsPanel() {
+	public void removeOptionsPanel() {
 		this.optionsPanelOn = false;
 		Button.GLOBAL_ACTIVATION = (byte) 0;
 	}
@@ -165,7 +144,7 @@ final public class MenuObject extends GameObject {
 	 * @return MenuObject.game
 	 */
 	@Contract(pure = true)
-	final public @NotNull Game getGame() {
+	public @NotNull Game getGame() {
 		return this.game;
 	}
 
@@ -182,7 +161,7 @@ final public class MenuObject extends GameObject {
 	/**
 	 * Called when the menu should no longer exist (since destructor is weird in Java).
 	 */
-	final public void destroy() {
+	public void destroy() {
 		for(final AudioObject audioObject : this.getAudioObjects()) {
 			audioObject.stop();
 		}

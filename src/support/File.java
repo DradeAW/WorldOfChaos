@@ -188,12 +188,7 @@ final public class File {
 		// Loops to find the last existing directory to mkdir.
 		while(true) {
 			final int lastSlash = temp.lastIndexOf('/');
-			if(lastSlash == -1) {
-				System.err.println("Error: Could not write to file \"" +  fileName + "\"");
-				System.err.println("Folder not found.");
-				new Exception().printStackTrace();
-				System.exit(1);
-			}
+			assert lastSlash != -1 : "Error: Could not write to file \"" +  fileName + "\"\nFolder not found.";
 
 			final String parentName = temp.substring(0, lastSlash);
 			final URL url = File.getURL(parentName);
@@ -249,7 +244,7 @@ final public class File {
 	 * Makes all directories if they don't exist to a given file or folder.
 	 *
 	 * @param file File or folder's
-	 * @return true if directories were made.
+	 * @return true if directories were created.
 	 */
 	public static boolean makeDirectories(final @NotNull java.io.File file) {
 		if(!file.isDirectory()) {

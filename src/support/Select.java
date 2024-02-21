@@ -64,12 +64,7 @@ public class Select {
      */
     @Contract(pure = true)
     final public @NotNull String getOption(final int index) {
-        if(index < 0 || index >= this.getList().length) {
-            System.err.println("Error: Index not valid.");
-            System.err.println("Index passed in parameter: " + index + " ; List length: " + this.getList().length);
-            new Exception().printStackTrace();
-            System.exit(1);
-        }
+        assert index >= 0 && index < this.getLength() : "Index not valid.\nIndex passed in parameter: " + index + " ; List length: " + this.getLength();
 
         return this.getList()[index];
     }
@@ -90,12 +85,7 @@ public class Select {
      * @param index Index to set
      */
     final public void setIndex(final int index) {
-        if(index < 0 || index >= this.getLength()) {
-            System.err.println("Error: Tried to set an incorrect index.");
-            System.err.println("Index = " + index + ", select's length = " + this.getLength());
-            new Exception().printStackTrace();
-            return;
-        }
+        assert index >= 0 && index < this.getLength() : "Error: Tried to set an incorrect index.\nIndex = " + index + " ; select's length: " + this.getLength();
 
         this.index = index;
     }

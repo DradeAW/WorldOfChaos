@@ -24,7 +24,7 @@ public class Hero extends Character {
 	/**
 	 * Hero's Textures.
 	 */
-	private static Material[] materials = new Material[] {
+	final private static Material[] materials = new Material[] {
 		new Material(new Texture("temp_hero/hero_NORTH_0")),
 		new Material(new Animation(new Texture[] {new Texture("temp_hero/hero_NORTH_1"), new Texture("temp_hero/hero_NORTH_2")}, 1.0)),
 		new Material(new Texture("temp_hero/hero_EAST_0")),
@@ -68,11 +68,7 @@ public class Hero extends Character {
 	public Hero(final @NotNull String name) {
 		super(name, Hero.SIZE, Hero.SIZE);
 
-		if(Hero.instance != null) {
-			System.err.println("Error: Hero constructor is called when a Hero already exists.");
-			new Exception().printStackTrace();
-			System.exit(1);
-		}
+		assert Hero.instance == null : "Error: Hero constructor is called when a Hero already exists.";
 		Hero.instance = this;
 
 		this.camera = new Camera();
