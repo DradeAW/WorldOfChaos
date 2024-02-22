@@ -7,7 +7,9 @@ package engine.physics;
   https://www.chrishecker.com/Rigid_Body_Dynamics
  */
 
+import engine.game.objects.map.Map;
 import engine.math.Vector2f;
+import engine.physics.colliders.AABBCollider;
 import engine.physics.colliders.Collider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -44,38 +46,44 @@ final public class PhysicsEngine {
 			}
 
 			// Then, we detect and resolve collisions.
-			// TODO: Here, asCollider() can be called multiple times for the same object.
-			for(int i = 0; i < PhysicsEngine.objects.size(); i++) {
-				final PhysicsObject object = PhysicsEngine.objects.get(i);
+			for(int i = 0; i < PhysicsEngine.getObjects().size(); i++) {
+				final PhysicsObject object1 = PhysicsEngine.getObjects().get(i);
+				final Collider collider1 = object1.asCollider();
 				final ArrayList<PhysicsObject> potentialColliders = new ArrayList<>();
 
-				for(int j = i + 1; j < PhysicsEngine.objects.size(); j++) {
+				for(int j = i + 1; j < PhysicsEngine.getObjects().size(); j++) {
 					// TODO: Check position before adding.
-					potentialColliders.add(PhysicsEngine.objects.get(j));
+					potentialColliders.add(PhysicsEngine.getObjects().get(j));
 				}
 
-				// TODO: Add collision with map tiles.
-				/*if(!object.canFly()) {
-					potentialColliders.addAll(Map.getInstance().getTilesOnAsColliders(object.getPosition(), object.getPhysicsWidthAsInt(), object.getPhysicsHeightAsInt(), object.canWalk(), object.canSwim()));
-				}*/
-
 				for(final PhysicsObject object2 : potentialColliders) {
-					final Collider collider1 = object.asCollider();
 					final Collider collider2 = object2.asCollider();
 
 					final @Nullable Vector2f normal = collider1.intersect(collider2);
 					if(normal == null) continue;
 
 					if(object2.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
-						object.move(normal.mul(-1));
-					} else if(object.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
+						object1.move(normal.mul(-1));
+					} else if(object1.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
 						object2.move(normal);
 					} else {  // TODO: Not taking velocity and/or mass into account?
-						object.move(normal.mul(-0.5f));
+						object1.move(normal.mul(-0.5f));
 						object2.move(normal.mul(0.5f));
 					}
 
-					PhysicsEngine.resolveCollision(object, object2, normal);
+					PhysicsEngine.resolveCollision(object1, object2, normal);
+				}
+
+				if(!object1.canFly() && object1.getMovementsAllowed() != MovementsAllowed.IMMOBILE) {
+					final ArrayList<AABBCollider> tiles = Map.getInstance().getTilesOnAsColliders(object1.getPosition(), object1.getPhysicsWidth(), object1.getPhysicsHeight(), object1.canWalk(), object1.canSwim());
+
+					for(final AABBCollider tile : tiles) {
+						final @Nullable Vector2f normal = collider1.intersect(tile);
+						if(normal == null) continue;
+
+						object1.move(normal.mul(-1));
+						// TODO: Resolve collision with tile.
+					}
 				}
 			}
 		}
