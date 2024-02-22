@@ -5,6 +5,7 @@ import engine.game.objects.GameObject;
 import engine.game.objects.map.Map;
 import engine.math.Vector2f;
 import engine.physics.colliders.AABBCollider;
+import engine.physics.colliders.CircleCollider;
 import engine.physics.colliders.Collider;
 import engine.util.Direction;
 import org.jetbrains.annotations.Contract;
@@ -32,6 +33,11 @@ public abstract class PhysicsObject extends GameObject {
 	private float restitution = 1.0f;
 
 	/**
+	 * Object's representation as a Collider.
+	 */
+	private @NotNull Collider collider;
+
+	/**
 	 * Object's movements that are allowed.
 	 */
 	final private MovementsAllowed movementsAllowed;
@@ -47,11 +53,13 @@ public abstract class PhysicsObject extends GameObject {
 	 * @param name Name to set
 	 * @param width Width to set
 	 * @param height Height to set
+	 * @param collider Object's representation as a Collider
 	 * @param movements Object's movements that are allowed
 	 */
-	public PhysicsObject(final @NotNull String name, final float width, final float height, final MovementsAllowed movements) {
+	public PhysicsObject(final @NotNull String name, final float width, final float height, final @NotNull Collider collider, final MovementsAllowed movements) {
 		super(name, width, height);
 
+		this.collider = collider;
 		this.movementsAllowed = movements;
 	}
 
@@ -212,23 +220,13 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
-	 * Returns a Collider that represents the Physics Object at the time it is called.
-	 * Need to take into account the position, rotation, scale ...
+	 * Returns a Collider that represents the Physics Object.
+	 * You may need to call 'PhysicsObject.updateCollider()' first to make sure the position is correct.
 	 *
 	 * @return new Collider
 	 */
-	public abstract @NotNull Collider asCollider();
-
-	/**
-	 * Returns an AABBCollider depending on the Position, width ahd height of the Physics Object.
-	 * Might not match the actual Physics Object: see PhysicsObject.asCollider().
-	 *
-	 * @return new AABBCollider
-	 */
-	protected AABBCollider asAABBCollider() { // TODO: Not taking scale into account
-		assert this.getTransform().getTransformedRotation() == 0 : "Error: AABBCollider cannot be rotated!";
-
-		return new AABBCollider(this.getPosition(), this.getPhysicsWidth(), this.getPhysicsHeight());
+	final public @NotNull Collider asCollider() {
+		return this.collider;
 	}
 
 	/**
@@ -293,11 +291,13 @@ public abstract class PhysicsObject extends GameObject {
 
 	/**
 	 * Moves the PhysicsObject by a certain amount.
+	 * Also updates the collider representation.
 	 *
 	 * @param translation Translation to apply
 	 */
 	final void move(final @NotNull Vector2f translation) {
 		this.setPosition(this.getPosition().add(translation));
+		this.updateCollider();
 	}
 
 	/**
@@ -311,6 +311,27 @@ public abstract class PhysicsObject extends GameObject {
 		final @NotNull Vector2f translation = this.getLinearVelocity().mul((float)(delta * Options.TILE_SIZE * (this.canFly() ? 1 : tileSpeed)));
 		this.move(translation);
 		this.refreshDirection(false);
+	}
+
+	/**
+	 * Updates the PhysicsObject's collider based on position / rotation / scale.
+	 */
+	public void updateCollider() {
+		if(this.collider instanceof AABBCollider) {
+			assert this.getTransform().getTransformedRotation() == 0 : "AABBCollider doesn't support rotation.";
+
+			// TODO: Make sure to take scale into account.
+			final AABBCollider collider = (AABBCollider) this.collider;
+			collider.setPosition(this.getPosition());
+			collider.setWidth(this.getPhysicsWidth());
+			collider.setHeight(this.getPhysicsHeight());
+		} else if(this.collider instanceof CircleCollider) {
+			assert this.getPhysicsWidth() == this.getPhysicsHeight() : "CircleCollider width and height are different!.";
+
+			final CircleCollider collider = (CircleCollider) this.collider;
+			collider.setCenter(this.getPosition().add(this.getPhysicsWidth()/2, this.getPhysicsHeight()/2));
+			collider.setRadius(this.getPhysicsWidth()/2);
+		}
 	}
 
 }

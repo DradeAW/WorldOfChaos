@@ -39,13 +39,6 @@ final public class Game extends CoreGame {
 	 */
 	private byte load;
 
-	/**
-	 * Creates a new Game instance.
-	 */
-	public Game() {
-		super();
-	}
-
 	@Override
 	public @NotNull Game init() {
 		FontLoader.loadAll();

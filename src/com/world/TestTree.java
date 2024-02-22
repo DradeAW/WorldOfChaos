@@ -22,18 +22,13 @@ public class TestTree extends PhysicsObject {
 	 * Create a new TestTree instance.
 	 */
 	public TestTree() {
-		super("Test tree", Options.TILE_SIZE, Options.TILE_SIZE * 2, MovementsAllowed.IMMOBILE);
+		super("Test tree", Options.TILE_SIZE, Options.TILE_SIZE * 2, new AABBCollider(), MovementsAllowed.IMMOBILE);
 
 		this.setPosition(new Vector2f(26 * Options.TILE_SIZE, 22 * Options.TILE_SIZE));
 		this.setDepth(-0.3f);
 
 		final RenderedComponent renderedComponent = new RenderedComponent(TestTree.MATERIAL, Options.TILE_SIZE, Options.TILE_SIZE * 2);
 		this.addComponent(renderedComponent);
-	}
-
-	@Override
-	public @NotNull AABBCollider asCollider() {
-		return this.asAABBCollider();
 	}
 
 	@Override

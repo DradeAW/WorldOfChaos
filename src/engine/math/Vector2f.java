@@ -282,6 +282,15 @@ final public class Vector2f {
 	}
 
 	/**
+	 * Sets the Vector2f's position to r.
+	 *
+	 * @param r Vector2f to set
+	 */
+	public void set(final @NotNull Vector2f r) {
+		this.set(r.getX(), r.getY());
+	}
+
+	/**
 	 * Adds (x ; y) to the Vector2f.
 	 *
 	 * @param x X amount to add

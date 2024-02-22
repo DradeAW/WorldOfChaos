@@ -10,7 +10,7 @@ public class CircleCollider extends Collider {
 	/**
 	 * Circle's center.
 	 */
-	private @NotNull Vector2f center;
+	final private @NotNull Vector2f center;
 
 	/**
 	 * Circle's radius.
@@ -38,6 +38,14 @@ public class CircleCollider extends Collider {
 	public CircleCollider(final float x, final float y, final float radius) {
 		this.center = new Vector2f(x, y);
 		this.radius = radius;
+	}
+
+	/**
+	 * Creates a new CircleCollider instance.
+	 */
+	public CircleCollider() {
+		this(new Vector2f(), 0);
+
 	}
 
 	@Contract(pure = true)
@@ -86,6 +94,25 @@ public class CircleCollider extends Collider {
 	@Override
 	public float area() {
 		return Math.round(Math.PI * this.radius * this.radius);
+	}
+
+	/**
+	 * Sets the Circle's center coordinates.
+	 *
+	 * @param center Center to set
+	 */
+	public void setCenter(final @NotNull Vector2f center) {
+		this.center.set(center);
+	}
+
+	/**
+	 * Sets the Circle's radius.
+	 *
+	 * @param radius Radius to set
+	 */
+	public void setRadius(final float radius) {
+		assert radius >= 0.0f : "Error: CircleCollider.setRadius(" + radius + ") - radius must be positive.";
+		this.radius = radius;
 	}
 
 }

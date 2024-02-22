@@ -2,6 +2,7 @@ package com.objects.characters;
 
 import engine.physics.MovementsAllowed;
 import engine.physics.PhysicsObject;
+import engine.physics.colliders.AABBCollider;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,7 @@ public abstract class Character extends PhysicsObject {
 	 * /@param attribute Character's attribute
 	 */
 	public Character(final @NotNull String name, final float width, final float height/*, final @NotNull Attribute attribute*/) {
-		super(name, width, height, MovementsAllowed.ONLY_WALK);
+		super(name, width, height, new AABBCollider(), MovementsAllowed.ONLY_WALK);
 
 		//this.attribute = attribute;
 	}

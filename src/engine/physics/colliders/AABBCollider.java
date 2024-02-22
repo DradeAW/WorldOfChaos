@@ -15,7 +15,7 @@ public class AABBCollider extends Collider {
     /**
      * AABBCollider's bottom-left corner.
      */
-    private @NotNull Vector2f position;
+    final private @NotNull Vector2f position;
 
     /**
      * AABBCollider's width.
@@ -50,6 +50,13 @@ public class AABBCollider extends Collider {
 	 */
 	public AABBCollider(final float x, final float y, final float width, final float height) {
 		this(new Vector2f(x, y), width, height);
+	}
+
+	/**
+	 * Creates a new AABBCollider instance.
+	 */
+	public AABBCollider() {
+		this(new Vector2f(), 0, 0);
 	}
 
 	@Contract(pure = true)
@@ -93,8 +100,6 @@ public class AABBCollider extends Collider {
 		return this.position.getX() + this.width;
 	}
 
-
-
 	/**
 	 * Returns the AABBCollider's y position (bottom side).
 	 *
@@ -117,6 +122,35 @@ public class AABBCollider extends Collider {
 	@Override
 	public float area() {
 		return this.width * this.height;
+	}
+
+	/**
+	 * Sets the AABBCollider's bottom-left corner coordinates.
+	 *
+	 * @param position Position to set
+	 */
+	public void setPosition(final @NotNull Vector2f position) {
+		this.position.set(position);
+	}
+
+	/**
+	 * Sets the AABBCollider's width.
+	 *
+	 * @param width Width to set
+	 */
+	public void setWidth(final float width) {
+		assert width >= 0 : "Error: AABBCollider.width must be positive or null.";
+		this.width = width;
+	}
+
+	/**
+	 * Sets the AABBCollider's height.
+	 *
+	 * @param height Height to set
+	 */
+	public void setHeight(final float height) {
+		assert height >= 0 : "Error: AABBCollider.height must be positive or null.";
+		this.height = height;
 	}
 
 }

@@ -168,7 +168,7 @@ public class GameObject implements GameInterface {
 	 *
 	 * @param coreEngine Core engine to set
 	 */
-	public void addToEngine(final @NotNull CoreEngine coreEngine) {
+	public void addToEngine(final CoreEngine coreEngine) {
 		this.coreEngine = coreEngine;
 
 		for(final @NotNull GameObject object : this.getChildren()) {
