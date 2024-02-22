@@ -36,7 +36,10 @@ final public class PhysicsEngine {
 		for(int it = 0; it < PhysicsEngine.ITERATIONS_PER_FRAME; it++) {
 			// First we move each object.
 			for(final PhysicsObject object : PhysicsEngine.objects) {
-				if(!object.isMoving()) continue;
+				if(!object.isMoving()) {
+					object.updateCollider();
+					continue;
+				}
 				object.updatePosition(delta / PhysicsEngine.ITERATIONS_PER_FRAME);
 			}
 
@@ -63,8 +66,14 @@ final public class PhysicsEngine {
 					final @Nullable Vector2f normal = collider1.intersect(collider2);
 					if(normal == null) continue;
 
-					object.move(normal.mul(-0.5f));
-					object2.move(normal.mul(0.5f));
+					if(object2.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
+						object.move(normal.mul(-1));
+					} else if(object.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
+						object2.move(normal);
+					} else {  // TODO: Not taking velocity and/or mass into account?
+						object.move(normal.mul(-0.5f));
+						object2.move(normal.mul(0.5f));
+					}
 
 					PhysicsEngine.resolveCollision(object, object2, normal);
 				}

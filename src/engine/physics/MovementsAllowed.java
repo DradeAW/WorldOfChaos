@@ -3,11 +3,12 @@ package engine.physics;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-/**
+/*
  * What movements can the Physics Object perform ?
  * Walk, swim, immobile, fly ?
  */
-public enum MovementsAllowed { // TODO: Make better names than "object" and "bounce".
+
+public enum MovementsAllowed {
 
 	/**
 	 * The object can move at all.
