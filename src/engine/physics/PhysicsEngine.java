@@ -5,6 +5,7 @@ package engine.physics;
 
   The Physics are based on Chris Hecker's "Rigid Body Dynamics" series of articles
   https://www.chrishecker.com/Rigid_Body_Dynamics
+  and only handles convex objects (concave objects might result in unexpected behavior!).
  */
 
 import engine.game.objects.map.Map;
