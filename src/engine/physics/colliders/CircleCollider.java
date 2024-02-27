@@ -76,6 +76,26 @@ public class CircleCollider extends Collider {
 		}
 	}
 
+	@Contract(pure = true)
+	@Override
+	public float[] projectOnAxis(final @NotNull Vector2f axis) {
+		final Vector2f axisRadius = axis.mul(this.getRadius());
+
+		final Vector2f p1 = this.getCenter().sub(axisRadius);
+		final Vector2f p2 = this.getCenter().add(axisRadius);
+
+		float min = p1.dot(axis);
+		float max = p2.dot(axis);
+
+		if(min > max) {
+			final float temp = min;
+			min = max;
+			max = temp;
+		}
+
+		return new float[]{min, max};
+	}
+
 	/**
 	 * Returns a copy of the Circle's center (and not the pointer).
 	 *

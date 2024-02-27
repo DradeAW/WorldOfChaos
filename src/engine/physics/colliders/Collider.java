@@ -25,6 +25,16 @@ public abstract class Collider {
 	public abstract @Nullable Vector2f intersect(final @NotNull Collider collider);
 
 	/**
+	 * Used by the Separating Axis Theory to project the Collider on an axis.
+	 * Returns the min and max values of the projection.
+	 *
+	 * @param axis Axis to project on (must be normalized!!)
+	 * @return new float[2]
+	 */
+	@Contract(pure = true)
+	public abstract float[] projectOnAxis(final @NotNull Vector2f axis);
+
+	/**
 	 * Returns the Collider's area.
 	 *
 	 * @return new int
