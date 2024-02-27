@@ -65,14 +65,15 @@ final public class PhysicsEngine {
 
 					if(object2.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
 						object1.move(normal.mul(-1));
+						PhysicsEngine.resolveCollision(object1, null, normal);
 					} else if(object1.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
 						object2.move(normal);
+						PhysicsEngine.resolveCollision(object2, null, normal);
 					} else {  // TODO: Not taking velocity and/or mass into account?
 						object1.move(normal.mul(-0.5f));
 						object2.move(normal.mul(0.5f));
+						PhysicsEngine.resolveCollision(object1, object2, normal);
 					}
-
-					PhysicsEngine.resolveCollision(object1, object2, normal);
 				}
 
 				if(!object1.canFly() && object1.getMovementsAllowed() != MovementsAllowed.IMMOBILE) {
@@ -83,7 +84,7 @@ final public class PhysicsEngine {
 						if(normal == null) continue;
 
 						object1.move(normal.mul(-1));
-						// TODO: Resolve collision with tile.
+						PhysicsEngine.resolveCollision(object1, null, normal);
 					}
 				}
 			}
@@ -97,19 +98,21 @@ final public class PhysicsEngine {
 	 * @param object2 Second PhysicsObject
 	 * @param normal Collision's normal vector.
 	 */
-	private static void resolveCollision(final @NotNull PhysicsObject object1, final @NotNull PhysicsObject object2, final @NotNull Vector2f normal) {
-		final Vector2f relativeVelocity = object2.getLinearVelocity().sub(object1.getLinearVelocity());
+	private static void resolveCollision(final @NotNull PhysicsObject object1, final @Nullable PhysicsObject object2, final @NotNull Vector2f normal) {
+		final Vector2f velocity2 = object2 == null ? Vector2f.zero : object2.getLinearVelocity();
+		final Vector2f relativeVelocity = velocity2.sub(object1.getLinearVelocity());
 		if(relativeVelocity.dot(normal) > 0) return;
 
 		final float invMass1 = 1 / object1.getMass();
-		final float invMass2 = 1 / object2.getMass();
+		final float invMass2 = object2 == null ? 0 : 1 / object2.getMass();
 
-		final float e = Math.min(object1.getRestitution(), object2.getRestitution());
+		final float e = object2 == null ? object1.getRestitution() : Math.min(object1.getRestitution(), object2.getRestitution());
 		final float j = -(1 + e) * relativeVelocity.dot(normal) / (invMass1 + invMass2);
 
 		final Vector2f impulse = normal.mul(j);
 		object1.addLinearVelocity(impulse.mul(-invMass1));
-		object2.addLinearVelocity(impulse.mul(invMass2));
+		if(object2 != null)
+			object2.addLinearVelocity(impulse.mul(invMass2));
 	}
 
 	/**

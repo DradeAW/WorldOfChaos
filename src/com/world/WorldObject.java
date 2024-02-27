@@ -66,7 +66,7 @@ public class WorldObject extends GameObject {
 		Map.setInstance(this.map);
 
 		this.addChild(new TestTree().init());
-		//this.addChild(new TestFireBall().init());
+		this.addChild(new TestFireBall().init());
 
 		return this;
 	}

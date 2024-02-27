@@ -23,11 +23,11 @@ public class TestFireBall extends PhysicsObject {
 	 * Create a new TestFireBall instance.
 	 */
 	public TestFireBall() {
-		super("Test fire ball", Options.TILE_SIZE, Options.TILE_SIZE, new CircleCollider(), MovementsAllowed.FLY);
+		super("Test fire ball", Options.TILE_SIZE, Options.TILE_SIZE, new CircleCollider(), MovementsAllowed.ONLY_WALK);
 
-		this.setPosition(new Vector2f(40 * Options.TILE_SIZE, 7.5f * Options.TILE_SIZE));
+		this.setPosition(new Vector2f(30 * Options.TILE_SIZE, 9.5f * Options.TILE_SIZE));
 		this.setDepth(-0.3f);
-		this.setLinearVelocity(new Vector2f(-6, 6));
+		this.setLinearVelocity(new Vector2f(-6, -5));
 
 		final RenderedComponent renderedComponent = new RenderedComponent(TestFireBall.MATERIAL, Options.TILE_SIZE, Options.TILE_SIZE);
 		this.addComponent(renderedComponent);

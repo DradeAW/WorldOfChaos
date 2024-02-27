@@ -62,7 +62,12 @@ public class AABBCollider extends Collider {
 	@Contract(pure = true)
 	@Override
 	public @Nullable Vector2f intersect(final @NotNull Collider collider) {
-		if(collider instanceof AABBCollider) {
+		if(collider instanceof CircleCollider) {
+			final CircleCollider circleCollider = (CircleCollider) collider;
+			final Vector2f normal = circleCollider.intersect(this);
+
+			return normal == null ? null : normal.mul(-1);
+		} else if(collider instanceof AABBCollider) {
 			final AABBCollider aabbCollider = (AABBCollider) collider;
 
 			final float xOverlap = Math.min(this.getMaxX(), aabbCollider.getMaxX()) - Math.max(this.getMinX(), aabbCollider.getMinX());
@@ -77,9 +82,11 @@ public class AABBCollider extends Collider {
 			} else {
 				return new Vector2f(0, yOverlap * (this.getMinY() < aabbCollider.getMinY() ? 1 : -1));
 			}
+		} else {
+			System.err.print("Error: Collision between AABBCollider and " + collider + " is not implemented yet.");
+			new Exception().printStackTrace();
+			return null;
 		}
-
-        return null; // TODO.
     }
 
 	/**

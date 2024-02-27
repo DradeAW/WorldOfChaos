@@ -63,6 +63,12 @@ public class CircleCollider extends Collider {
 
 			final Vector2f normal = circleCollider.getCenter().sub(this.getCenter()).normalized();
 			return normal.mul(radii - distance);
+		} else if(collider instanceof AABBCollider) {
+			final AABBCollider aabbCollider = (AABBCollider) collider;
+
+			System.err.print("Error: Collision between CircleCollider and AABBCollider is not implemented yet.");
+			new Exception().printStackTrace();
+			return null;
 		} else {
 			System.err.print("Error: Collision between CircleCollider and " + collider + " is not implemented yet.");
 			new Exception().printStackTrace();
