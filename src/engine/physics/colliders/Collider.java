@@ -28,7 +28,7 @@ public abstract class Collider {
 	 * Used by the Separating Axis Theory to project the Collider on an axis.
 	 * Returns the min and max values of the projection.
 	 *
-	 * @param axis Axis to project on (must be normalized!!)
+	 * @param axis Axis to project on (will be normalized internally)
 	 * @return new float[2]
 	 */
 	@Contract(pure = true)

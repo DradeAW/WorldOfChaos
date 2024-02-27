@@ -89,6 +89,22 @@ public class AABBCollider extends Collider {
 		}
     }
 
+	@Contract(pure = true)
+	@Override
+	public float[] projectOnAxis(final @NotNull Vector2f axis) {
+		float min = Float.MAX_VALUE;
+		float max = -Float.MAX_VALUE;
+
+		for(final Vector2f vertex : this.getVertices()) {
+			final float projection = vertex.projectOnAxis(axis);
+
+			if(projection < min) min = projection;
+			if(projection > max) max = projection;
+		}
+
+		return new float[]{min, max};
+	}
+
 	/**
 	 * Returns the AABBCollider's x position (left side).
 	 *
@@ -123,6 +139,20 @@ public class AABBCollider extends Collider {
 	 */
 	public float getMaxY() {
 		return this.position.getY() + this.height;
+	}
+
+	/**
+	 * Returns the AABBCollider's four vertices (i.e. corners).
+	 *
+	 * @return new Vector2f[4]
+	 */
+	public Vector2f[] getVertices() {
+		return new Vector2f[]{
+			new Vector2f(this.position),
+			this.position.add(this.width, 0),
+			this.position.add(this.width, this.height),
+			this.position.add(0, this.height)
+		};
 	}
 
 	@Contract(pure = true)

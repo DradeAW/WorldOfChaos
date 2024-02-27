@@ -233,6 +233,17 @@ final public class Vector2f {
 		return this.getX() * r.getY() - this.getY() * r.getX();
 	}
 
+/**
+	 * Returns the projection of the Vector2f on the given axis.
+	 *
+	 * @param axis Axis to project on
+	 * @return new float
+	 */
+	@Contract(pure = true)
+	public float projectOnAxis(final @NotNull Vector2f axis) {
+		return this.dot(axis.normalized());
+	}
+
 	/**
 	 * Returns the Vector2f's x position.
 	 *

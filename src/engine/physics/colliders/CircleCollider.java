@@ -79,13 +79,13 @@ public class CircleCollider extends Collider {
 	@Contract(pure = true)
 	@Override
 	public float[] projectOnAxis(final @NotNull Vector2f axis) {
-		final Vector2f axisRadius = axis.mul(this.getRadius());
+		final Vector2f axisRadius = axis.normalized().mul(this.getRadius());
 
 		final Vector2f p1 = this.getCenter().sub(axisRadius);
 		final Vector2f p2 = this.getCenter().add(axisRadius);
 
-		float min = p1.dot(axis);
-		float max = p2.dot(axis);
+		float min = p1.projectOnAxis(axis);
+		float max = p2.projectOnAxis(axis);
 
 		if(min > max) {
 			final float temp = min;
