@@ -60,7 +60,7 @@ public abstract class Collider {
 			final float[] projection1 = collider1.projectOnAxis(axis);
 			final float[] projection2 = collider2.projectOnAxis(axis);
 
-			if(projection1[0] > projection2[1] || projection2[0] > projection1[1]) return null;
+			if(projection1[0] >= projection2[1] || projection2[0] >= projection1[1]) return null;
 
 			final float currentOverlap = Math.min(projection1[1], projection2[1]) - Math.max(projection1[0], projection2[0]);
 			if(currentOverlap < depth) {

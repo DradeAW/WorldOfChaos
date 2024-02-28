@@ -73,7 +73,7 @@ public class AABBCollider extends Collider {
 			final float xOverlap = Math.min(this.getMaxX(), aabbCollider.getMaxX()) - Math.max(this.getMinX(), aabbCollider.getMinX());
 			final float yOverlap = Math.min(this.getMaxY(), aabbCollider.getMaxY()) - Math.max(this.getMinY(), aabbCollider.getMinY());
 
-			if(xOverlap < 0 || yOverlap < 0) {
+			if(xOverlap <= 0 || yOverlap <= 0) {
 				return null;
 			}
 
