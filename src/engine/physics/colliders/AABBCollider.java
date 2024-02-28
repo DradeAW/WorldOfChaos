@@ -155,6 +155,15 @@ public class AABBCollider extends Collider {
 		};
 	}
 
+	/**
+	 * Returns the AABBCollider's center.
+	 *
+	 * @return new Vector2f
+	 */
+	public Vector2f getCenter() {
+		return this.position.add(this.width / 2, this.height / 2);
+	}
+
 	@Contract(pure = true)
 	@Override
 	public float area() {

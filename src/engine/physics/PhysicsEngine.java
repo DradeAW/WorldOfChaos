@@ -65,14 +65,14 @@ final public class PhysicsEngine {
 
 					if(object2.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
 						object1.move(normal.mul(-1));
-						PhysicsEngine.resolveCollision(object1, null, normal);
+						PhysicsEngine.resolveCollision(object1, null, normal.normalized());
 					} else if(object1.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
 						object2.move(normal);
-						PhysicsEngine.resolveCollision(object2, null, normal);
+						PhysicsEngine.resolveCollision(object2, null, normal.normalized());
 					} else {  // TODO: Not taking velocity and/or mass into account?
 						object1.move(normal.mul(-0.5f));
 						object2.move(normal.mul(0.5f));
-						PhysicsEngine.resolveCollision(object1, object2, normal);
+						PhysicsEngine.resolveCollision(object1, object2, normal.normalized());
 					}
 				}
 
@@ -84,7 +84,7 @@ final public class PhysicsEngine {
 						if(normal == null) continue;
 
 						object1.move(normal.mul(-1));
-						PhysicsEngine.resolveCollision(object1, null, normal);
+						PhysicsEngine.resolveCollision(object1, null, normal.normalized());
 					}
 				}
 			}
@@ -96,7 +96,7 @@ final public class PhysicsEngine {
 	 *
 	 * @param object1 First PhysicsObject
 	 * @param object2 Second PhysicsObject
-	 * @param normal Collision's normal vector.
+	 * @param normal Collision's normal vector (normalized).
 	 */
 	private static void resolveCollision(final @NotNull PhysicsObject object1, final @Nullable PhysicsObject object2, final @NotNull Vector2f normal) {
 		final Vector2f velocity2 = object2 == null ? Vector2f.zero : object2.getLinearVelocity();

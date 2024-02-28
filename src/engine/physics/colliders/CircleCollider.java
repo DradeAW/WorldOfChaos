@@ -66,9 +66,19 @@ public class CircleCollider extends Collider {
 		} else if(collider instanceof AABBCollider) {
 			final AABBCollider aabbCollider = (AABBCollider) collider;
 
-			System.err.print("Error: Collision between CircleCollider and AABBCollider is not implemented yet.");
-			new Exception().printStackTrace();
-			return null;
+			final Vector2f[] axes = new Vector2f[] {
+				new Vector2f(1, 0),
+				new Vector2f(0, 1),
+				this.getCenter().sub(this.getCenter().closestPoint(aabbCollider.getVertices()))
+			};
+
+			final Vector2f normal = Collider.seperatingAxisTheorem(this, aabbCollider, axes);
+			if(normal == null) return null;
+
+			if(normal.dot(aabbCollider.getCenter().sub(this.getCenter())) < 0) {
+				normal.multiply(-1);
+			}
+			return normal;
 		} else {
 			System.err.print("Error: Collision between CircleCollider and " + collider + " is not implemented yet.");
 			new Exception().printStackTrace();

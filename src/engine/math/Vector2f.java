@@ -245,6 +245,30 @@ final public class Vector2f {
 	}
 
 	/**
+	 * Given an array of points, returns the point closest to (this) Vector2f.
+	 *
+	 * @param points Array of points
+	 * @return Closest point to (this) Vector2f
+	 */
+	public @NotNull Vector2f closestPoint(final @NotNull Vector2f[] points) {
+		assert points.length > 0;
+
+		float minDistance = Float.MAX_VALUE;
+		Vector2f closest = new Vector2f();
+
+		for(final Vector2f point : points) {
+			final float distance = this.distanceTo(point);
+
+			if(distance < minDistance) {
+				minDistance = distance;
+				closest = point;
+			}
+		}
+
+		return closest;
+	}
+
+	/**
 	 * Returns the Vector2f's x position.
 	 *
 	 * @return Vector2f's x position
