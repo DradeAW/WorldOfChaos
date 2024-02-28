@@ -96,7 +96,7 @@ final public class PhysicsEngine {
 	 * Resolves a collision between two objects.
 	 *
 	 * @param object1 First PhysicsObject
-	 * @param object2 Second PhysicsObject
+	 * @param object2 Second PhysicsObject (null if it's a tile)
 	 * @param normal Collision's normal vector (normalized).
 	 */
 	private static void resolveCollision(final @NotNull PhysicsObject object1, final @Nullable PhysicsObject object2, final @NotNull Vector2f normal) {

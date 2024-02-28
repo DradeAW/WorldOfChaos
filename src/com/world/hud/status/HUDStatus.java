@@ -32,7 +32,7 @@ public class HUDStatus extends HUDCategory {
 
 		this.setPosition(HUDStatus.POS);
 
-		this.addChild(new LifeBar(this.getHero()));
+		this.addChild(new HealthBar(this.getHero()));
 		this.addChild(new ManaBar(this.getHero()));
 	}
 

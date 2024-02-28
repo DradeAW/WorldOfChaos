@@ -1,5 +1,6 @@
 package com.objects.characters;
 
+import com.attributes.Attribute;
 import engine.physics.MovementsAllowed;
 import engine.physics.PhysicsObject;
 import engine.physics.colliders.AABBCollider;
@@ -11,7 +12,7 @@ public abstract class Character extends PhysicsObject {
 	/**
 	 * Character's attribute.
 	 */
-	//final private @NotNull Attribute attribute;
+	final private @NotNull Attribute attribute;
 
 	/**
 	 * Character's level.
@@ -26,10 +27,20 @@ public abstract class Character extends PhysicsObject {
 	 * @param height Character's height
 	 * /@param attribute Character's attribute
 	 */
-	public Character(final @NotNull String name, final float width, final float height/*, final @NotNull Attribute attribute*/) {
+	public Character(final @NotNull String name, final float width, final float height, final @NotNull Attribute attribute) {
 		super(name, width, height, new AABBCollider(), MovementsAllowed.ONLY_WALK);
 
-		//this.attribute = attribute;
+		this.attribute = attribute;
+	}
+
+	/**
+	 * Returns the Character's attributes.
+	 *
+	 * @return Character.attribute
+	 */
+	@Contract(pure = true)
+	final public @NotNull Attribute getAttribute() {
+		return this.attribute;
 	}
 
 	/**

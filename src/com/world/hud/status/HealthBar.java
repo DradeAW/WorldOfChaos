@@ -1,12 +1,11 @@
 package com.world.hud.status;
 
 import com.objects.characters.Hero;
-import engine.game.components.RenderedComponent;
 import engine.rendering.texture.Material;
 import engine.rendering.texture.Texture;
 import org.jetbrains.annotations.NotNull;
 
-public class LifeBar extends StatusBar {
+public class HealthBar extends StatusBar {
 
 	/**
 	 * Texture of life bar's content.
@@ -24,32 +23,32 @@ public class LifeBar extends StatusBar {
 	final public static Material BAR_BORDER_NOTFULL = new Material(new Texture("hud/status/bar_border_life_notfull"));
 
 	/**
-	 * Creates a new LifeBar instance.
+	 * Creates a new HealthBar instance.
 	 *
 	 * @param hero Hero to keep track of.
 	 */
-	protected LifeBar(final @NotNull Hero hero) {
-		super("life", LifeBar.BAR_CONTENT, hero);
+	protected HealthBar(final @NotNull Hero hero) {
+		super("life", HealthBar.BAR_CONTENT, hero);
 	}
 
 	@Override
 	public float getStatus() {
-		return 150.0f;
+		return 80.0f;
 	}
 
 	@Override
 	public float getStatusMax() {
-		return 200.0f;
+		return this.getHero().getAttribute().getTotalHealth();
 	}
 
 	@Override
 	protected Material getFullBorderMaterial() {
-		return LifeBar.BAR_BORDER_FULL;
+		return HealthBar.BAR_BORDER_FULL;
 	}
 
 	@Override
 	protected Material getNotFullBorderMaterial() {
-		return LifeBar.BAR_BORDER_NOTFULL;
+		return HealthBar.BAR_BORDER_NOTFULL;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.objects.characters;
 
 import com.GameOptions;
 import com.Options;
+import com.attributes.Attribute;
 import engine.game.components.Camera;
 import engine.game.components.RenderedComponent;
 import engine.math.Vector2f;
@@ -65,7 +66,7 @@ public class Hero extends Character {
 	 * @param name Hero's name
 	 */
 	public Hero(final @NotNull String name) {
-		super(name, Hero.SIZE, Hero.SIZE);
+		super(name, Hero.SIZE, Hero.SIZE, new Attribute(30, 30, 10, 10, 10, 10, 8, 8));
 
 		assert Hero.instance == null : "Error: Hero constructor is called when a Hero already exists.";
 		Hero.instance = this;

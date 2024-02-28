@@ -5,9 +5,9 @@ import org.jetbrains.annotations.Contract;
 public class Attribute {
 
 	/**
-	 * How much life do we get for each strength point.
+	 * How much health do we get for each strength point.
 	 */
-	final public static float LIFE_PER_STRENGTH = 7.0f;
+	final public static float HEALTH_PER_STRENGTH = 7.0f;
 
 	/**
 	 * How much damage to we get for each agility point.
@@ -22,7 +22,7 @@ public class Attribute {
 	/**
 	 * The base amount of life.
 	 */
-	private int baseLife;
+	private int baseHealth;
 
 	/**
 	 * The base amount of mana.
@@ -69,7 +69,7 @@ public class Attribute {
 	/**
 	 * Creates a new Attribute instance.
 	 *
-	 * @param baseLife Base life to set
+	 * @param baseHealth Base life to set
 	 * @param baseMana Base mana to set
 	 * @param baseDamage Base damage to set
 	 * @param baseStrength Base strength to set
@@ -78,8 +78,8 @@ public class Attribute {
 	 * @param baseArmor Base armor to set
 	 * @param baseMagicResistance Base magic resistance to set
 	 */
-	public Attribute(final int baseLife, final int baseMana, final int baseDamage, final int baseStrength, final int baseAgility, final int baseIntelligence, final int baseArmor, final int baseMagicResistance) {
-		this.setBaseLife(baseLife);
+	public Attribute(final int baseHealth, final int baseMana, final int baseDamage, final int baseStrength, final int baseAgility, final int baseIntelligence, final int baseArmor, final int baseMagicResistance) {
+		this.setBaseHealth(baseHealth);
 		this.setBaseMana(baseMana);
 		this.setBaseDamage(baseDamage);
 		this.setBaseStrength(baseStrength);
@@ -90,13 +90,23 @@ public class Attribute {
 	}
 
 	/**
-	 * Returns the base life.
+	 * Returns the base health.
 	 *
-	 * @return Attribute.baseLife
+	 * @return Attribute.baseHealth
 	 */
 	@Contract(pure = true)
-	final public int getBaseLife() {
-		return this.baseLife;
+	final public int getBaseHealth() {
+		return this.baseHealth;
+	}
+
+	/**
+	 * Returns the total health.
+	 *
+	 * @return Attribute.baseHealth + Attribute.baseStrength * Attribute::HEALTH_PER_STRENGTH
+	 */
+	@Contract(pure = true)
+	final public int getTotalHealth() {
+		return this.baseHealth + this.baseStrength * (int) Attribute.HEALTH_PER_STRENGTH;
 	}
 
 	/**
@@ -107,6 +117,16 @@ public class Attribute {
 	@Contract(pure = true)
 	final public int getBaseMana() {
 		return this.baseMana;
+	}
+
+	/**
+	 * Returns the total mana.
+	 *
+	 * @return Attribute.baseMana + Attribute.baseIntelligence * Attribute::MANA_PER_INTELLIGENCE
+	 */
+	@Contract(pure = true)
+	final public int getTotalMana() {
+		return this.baseMana + this.baseIntelligence * (int) Attribute.MANA_PER_INTELLIGENCE;
 	}
 
 	/**
@@ -172,10 +192,10 @@ public class Attribute {
 	/**
 	 * Sets the base life.
 	 *
-	 * @param baseLife Base life to set
+	 * @param baseHealth Base life to set
 	 */
-	final public void setBaseLife(final int baseLife) {
-		this.baseLife = baseLife;
+	final public void setBaseHealth(final int baseHealth) {
+		this.baseHealth = baseHealth;
 	}
 
 	/**
@@ -247,7 +267,7 @@ public class Attribute {
 	 * @param baseLife Base life to add
 	 */
 	final public void addBaseLife(final int baseLife) {
-		this.baseLife += baseLife;
+		this.baseHealth += baseLife;
 	}
 
 	/**
