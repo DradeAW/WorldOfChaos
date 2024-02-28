@@ -77,6 +77,8 @@ public class Hero extends Character {
 		this.setDepth(-0.2f);
 		this.addComponent(this.camera);
 		this.addComponent(this.renderedComponent);
+
+		this.setMass(70.0f);
 	}
 
 	@Override

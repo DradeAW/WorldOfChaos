@@ -8,6 +8,7 @@ package engine.physics;
   and only handles convex objects (concave objects might result in unexpected behavior!).
  */
 
+import com.objects.characters.Character;
 import engine.game.objects.map.Map;
 import engine.math.Vector2f;
 import engine.physics.colliders.AABBCollider;
@@ -110,8 +111,9 @@ final public class PhysicsEngine {
 		final float j = -(1 + e) * relativeVelocity.dot(normal) / (invMass1 + invMass2);
 
 		final Vector2f impulse = normal.mul(j);
-		object1.addLinearVelocity(impulse.mul(-invMass1));
-		if(object2 != null)
+		if(!(object1 instanceof Character))
+			object1.addLinearVelocity(impulse.mul(-invMass1));
+		if(object2 != null && !(object2 instanceof Character))
 			object2.addLinearVelocity(impulse.mul(invMass2));
 	}
 
