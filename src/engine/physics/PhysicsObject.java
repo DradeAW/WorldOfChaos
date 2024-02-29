@@ -162,6 +162,16 @@ public abstract class PhysicsObject extends GameObject {
 	}
 
 	/**
+	 * Returns the Physics's object hitbox's position.
+	 * By default, is the object's position (can be overridden).
+	 *
+	 * @return new Vector2f
+	 */
+	protected Vector2f getPhysicsPosition() {
+		return this.getPosition();
+	}
+
+	/**
 	 * Returns the Physics's object hitbox's width.
 	 * By default, is the object's width (can be overridden).
 	 *
@@ -322,14 +332,14 @@ public abstract class PhysicsObject extends GameObject {
 
 			// TODO: Make sure to take scale into account.
 			final AABBCollider collider = (AABBCollider) this.collider;
-			collider.setPosition(this.getPosition());
+			collider.setPosition(this.getPhysicsPosition());
 			collider.setWidth(this.getPhysicsWidth());
 			collider.setHeight(this.getPhysicsHeight());
 		} else if(this.collider instanceof CircleCollider) {
 			assert this.getPhysicsWidth() == this.getPhysicsHeight() : "CircleCollider width and height are different!.";
 
 			final CircleCollider collider = (CircleCollider) this.collider;
-			collider.setCenter(this.getPosition().add(this.getPhysicsWidth()/2, this.getPhysicsHeight()/2));
+			collider.setCenter(this.getPhysicsPosition().add(this.getPhysicsWidth()/2, this.getPhysicsHeight()/2));
 			collider.setRadius(this.getPhysicsWidth()/2);
 		}
 	}
