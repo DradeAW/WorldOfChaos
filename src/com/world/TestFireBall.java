@@ -17,13 +17,13 @@ public class TestFireBall extends PhysicsObject {
 	/**
 	 * Tree's material.
 	 */
-	final public static Material MATERIAL = new Material(new Texture("circle"));
+	final public static Material MATERIAL = new Material(new Texture("tmp_fireball"));
 
 	/**
 	 * Create a new TestFireBall instance.
 	 */
 	public TestFireBall() {
-		super("Test fire ball", Options.TILE_SIZE, Options.TILE_SIZE, new CircleCollider(), MovementsAllowed.ONLY_WALK);
+		super("Test fire ball", Options.TILE_SIZE, Options.TILE_SIZE, new CircleCollider(new Vector2f(), 0.9f*Options.TILE_SIZE), MovementsAllowed.ONLY_WALK);
 
 		this.setPosition(new Vector2f(30 * Options.TILE_SIZE, 9.5f * Options.TILE_SIZE));
 		this.setDepth(-0.3f);
