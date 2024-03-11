@@ -69,7 +69,7 @@ final public class PhysicsEngine {
 						PhysicsEngine.resolveCollision(object1, null, normal.normalized());
 					} else if(object1.getMovementsAllowed() == MovementsAllowed.IMMOBILE) {
 						object2.move(normal);
-						PhysicsEngine.resolveCollision(object2, null, normal.normalized());
+						PhysicsEngine.resolveCollision(object2, null, normal.mul(-1).normalized());
 					} else {  // TODO: Not taking velocity and/or mass into account?
 						object1.move(normal.mul(-0.5f));
 						object2.move(normal.mul(0.5f));
