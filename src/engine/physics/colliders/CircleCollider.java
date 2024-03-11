@@ -51,10 +51,9 @@ public class CircleCollider extends Collider {
 	@Contract(pure = true)
 	@Override
 	public @Nullable Vector2f intersect(final @NotNull Collider collider){
-		if(collider instanceof CircleCollider) {
-			final CircleCollider circleCollider = (CircleCollider) collider;
+		if(collider instanceof CircleCollider circleCollider) {
 
-			final float distance = this.getCenter().distanceTo(circleCollider.getCenter());
+            final float distance = this.getCenter().distanceTo(circleCollider.getCenter());
 			final float radii = this.getRadius() + circleCollider.getRadius();
 
 			if(distance >= radii) {
@@ -63,13 +62,12 @@ public class CircleCollider extends Collider {
 
 			final Vector2f normal = circleCollider.getCenter().sub(this.getCenter()).normalized();
 			return normal.mul(radii - distance);
-		} else if(collider instanceof AABBCollider) {
-			final AABBCollider aabbCollider = (AABBCollider) collider;
+		} else if(collider instanceof AABBCollider aabbCollider) {
 
-			final Vector2f[] axes = new Vector2f[] {
+            final Vector2f[] axes = new Vector2f[] {
 				new Vector2f(1, 0),
 				new Vector2f(0, 1),
-				this.getCenter().sub(this.getCenter().closestPoint(aabbCollider.getVertices()))
+				this.getCenter().sub(this.getCenter().closestPoint(aabbCollider.getVertices()))  // TODO: Really needed??
 			};
 
 			final Vector2f normal = Collider.seperatingAxisTheorem(this, aabbCollider, axes);

@@ -43,7 +43,7 @@ final public class File {
 	 * @param filename Images name
 	 * @return ImageIcon loaded
 	 */
-	public static ImageIcon getImageIcon(final @NotNull String filename){
+	public static @NotNull ImageIcon getImageIcon(final @NotNull String filename){
 		return getImageIcon(filename, true);
 	}
 
